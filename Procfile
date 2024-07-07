@@ -1,1 +1,1 @@
-web: app/run
+web: app/routes
