@@ -1,3 +1,8 @@
 # github.com/gorilla/mux v1.8.1
 ## explicit; go 1.20
 github.com/gorilla/mux
+# github.com/reloadly/reloadly-sdk-golang v1.0.1
+## explicit; go 1.15
+github.com/reloadly/reloadly-sdk-golang/airtime
+github.com/reloadly/reloadly-sdk-golang/authentication
+github.com/reloadly/reloadly-sdk-golang/error
