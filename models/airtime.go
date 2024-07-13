@@ -1,11 +1,13 @@
 package models
 
 import (
+	"fmt"
+
 	reloadly "github.com/reloadly/reloadly-sdk-golang/airtime"
 )
 
 func Airtime(number, amount string) (string, error) {
-	c, err := reloadly.NewClient("HWLjSX8IsfLJxtM3riD0WheELc4azOrT", "MSUu3ll37b-zxV5XUMLFeiDxhyvSPd-fSZHgIqFFpTIhVPWcYk2T6UCGVerLRwS", true)
+	c, err := reloadly.NewClient("LrSJMJirX0iR3MB6AKj9G2P6Ui3YsXjO", "4PYVcPKzSv-SSI7ZKhHEC4fZ6rcF1X-2VCGByiWTjqT1FylCmq0OcIBMCoJAwGu", true)
 	if err != nil {
 		return "", err
 	}
@@ -20,6 +22,7 @@ func Airtime(number, amount string) (string, error) {
 		return "", err
 	}
 	id := t.TransactionDate
+	fmt.Println(id)
 
-	return id, nil
+	return "success", nil
 }
