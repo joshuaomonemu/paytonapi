@@ -19,18 +19,19 @@ func GetBillersCategories(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, fmt.Sprintln(err))
 	}
 
-	var response *Structs.BillerCategoriesResponse
-	err = json.Unmarshal(resp, &response)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		return
-	}
+	// var response *Structs.BillerCategoriesResponse
+	// err = json.Unmarshal(resp, &response)
+	// if err != nil {
+	// 	io.WriteString(w, err.Error())
+	// 	return
+	// }
 
-	jsn, err := json.Marshal(response)
-	if err != nil {
-		log.Fatal(err)
-	}
-	io.WriteString(w, string(jsn))
+	// jsn, err := json.Marshal(response)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	//fmt.Println(jsn)
+	io.WriteString(w, string(resp))
 
 }
 
@@ -119,7 +120,6 @@ func Advice(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		io.WriteString(w, "Request format error")
 	}
-	fmt.Println(string(reqBody))
 
 	// var item *Structs.PaymentTransaction
 
@@ -129,7 +129,9 @@ func Advice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := models.Advice(jsonData)
+	fmt.Println(string(jsonData))
+
+	resp, err := models.Advice(reqBody)
 	if err != nil {
 		io.WriteString(w, fmt.Sprintln(err))
 	}

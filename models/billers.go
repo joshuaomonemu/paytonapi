@@ -24,9 +24,9 @@ var (
 // Replace with your actual values
 var (
 	terminalID       = "3pbl0001"
-	requestReference = "YFRED3332S3"
+	requestReference = "Qqdg0CK9yqR"
 	authorization    = accessToken
-	bu               = "https://sandbox.interswitchng.com/api/v2/quickteller/payments/advices" // Replace with production URL for live transactions
+	bu               = "https://qa.interswitchng.com/quicktellerservice/api/v5/Transactions" // Replace with production URL for live transactions
 	contentType      = "application/json"
 )
 
@@ -36,11 +36,14 @@ type TransactionData struct {
 	RequestReference string  `json:"requestReference"`
 	Amount           float64 `json:"amount"`
 	Currency         string  `json:"currency"`
-	PaymentCode      string  `json:"paymentCode"` // (Optional, required for some transactions)
+	PaymentCode      string  `json:"paymentCode"`
+	CustomerMobile   string  `json:"customerMobile"`
+	CustomerEmail    string  `json:"customerEmail"`
+	// (Optional, required for some transactions)
 	// Add other relevant fields as needed based on your transaction type
 }
 
-func GetBillersCategories() ([]byte, error) {
+func GetBillersCategories() (string, error) {
 	// Construct the API URL
 	url := baseURL
 
@@ -51,7 +54,7 @@ func GetBillersCategories() ([]byte, error) {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return "nil", err
 	}
 
 	// Set the Authorization header with the access token
@@ -65,7 +68,7 @@ func GetBillersCategories() ([]byte, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return "nil", err
 	}
 
 	defer resp.Body.Close()
@@ -74,16 +77,16 @@ func GetBillersCategories() ([]byte, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return "nil", err
 	}
 
 	// Check for successful response (status code 200)
 	if resp.StatusCode != http.StatusOK {
 		fmt.Println("Error:", resp.StatusCode, string(body))
-		return nil, err
+		return "nil", err
 	}
 
-	return body, nil
+	return accessToken, nil
 }
 
 func GetBillersCategoryId(id string) ([]byte, error) {
@@ -277,6 +280,9 @@ func Bill() {
 		RequestReference: requestReference,
 		Amount:           100.50, // Replace with your actual amount
 		Currency:         "NGN",
+		CustomerEmail:    "joshuaomonemu@gmail.com",
+		CustomerMobile:   "09133133461",
+		PaymentCode:      "4444009",
 	}
 
 	// Marshal data to JSON
@@ -304,6 +310,7 @@ func Bill() {
 		fmt.Println("Error sending request:", err)
 		return
 	}
+	fmt.Println(resp)
 
 	defer resp.Body.Close()
 
