@@ -1,6 +1,7 @@
 package models
 
 import (
+	"app/mail"
 	"fmt"
 
 	reloadly "github.com/reloadly/reloadly-sdk-golang/airtime"
@@ -21,8 +22,9 @@ func Airtime(number, amount string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	id := t.TransactionDate
-	fmt.Println(id)
+
+	fmt.Println(t.SenderPhone)
+	mail.AirtimeMail(number, amount)
 
 	return "success", nil
 }

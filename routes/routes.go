@@ -24,12 +24,9 @@ func Routes() {
 	}
 
 	//Endpoints and Route points for users
-	r.HandleFunc("/billers/categories", controller.GetBillersCategories).Methods("GET")
-	r.HandleFunc("/billers/categories/{id}", controller.GetBillersCategoryId).Methods("GET")
-	r.HandleFunc("/billers/item/{id}", controller.GetBillerItem).Methods("GET")
-	r.HandleFunc("/billers/advice", controller.Advice).Methods("POST")
-	r.HandleFunc("/billers/bill", controller.Bill).Methods("POST")
 	r.HandleFunc("/airtime/load", controller.Airtime).Methods("POST")
+	r.HandleFunc("/util/billers", controller.LoadBillers).Methods("POST")
+	r.HandleFunc("/util/bill/pay", controller.PayBill).Methods("POST")
 	//r.HandleFunc("/billers/validate", controller.CustomerValidation).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+port, r))

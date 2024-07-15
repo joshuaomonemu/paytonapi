@@ -1,4 +1,4 @@
-package Structs
+package structs
 
 type BillerCategory struct {
 	Id          int      `json:"Id"`
@@ -69,4 +69,49 @@ type PaymentTransaction struct {
 		CustomerID  string `json:"CustomerId"`
 	} `json:"customers"`
 	TerminalId string `json:"TerminalId"`
+}
+
+// ElectricityPaymentOption represents a single payment option for electricity bills.
+type ElectricityPaymentOption struct {
+	ID                                      int     `json:"id"`
+	Name                                    string  `json:"name"`
+	CountryCode                             string  `json:"countryCode"`
+	CountryName                             string  `json:"countryName"`
+	Type                                    string  `json:"type"`
+	ServiceType                             string  `json:"serviceType"`
+	LocalAmountSupported                    bool    `json:"localAmountSupported"`
+	LocalTransactionCurrencyCode            string  `json:"localTransactionCurrencyCode"`
+	MinLocalTransactionAmount               float64 `json:"minLocalTransactionAmount"`
+	MaxLocalTransactionAmount               float64 `json:"maxLocalTransactionAmount"`
+	LocalTransactionFee                     float64 `json:"localTransactionFee"`
+	LocalTransactionFeeCurrencyCode         string  `json:"localTransactionFeeCurrencyCode"`
+	LocalDiscountPercentage                 float64 `json:"localDiscountPercentage"`
+	InternationalAmountSupported            bool    `json:"internationalAmountSupported"`
+	InternationalTransactionCurrencyCode    string  `json:"internationalTransactionCurrencyCode"`
+	MinInternationalTransactionAmount       float64 `json:"minInternationalTransactionAmount"`
+	MaxInternationalTransactionAmount       float64 `json:"maxInternationalTransactionAmount"`
+	InternationalTransactionFee             float64 `json:"internationalTransactionFee"`
+	InternationalTransactionFeeCurrencyCode string  `json:"internationalTransactionFeeCurrencyCode"`
+	LocalTransactionFeePercentage           float64 `json:"localTransactionFeePercentage"`
+	InternationalTransactionFeePercentage   float64 `json:"internationalTransactionFeePercentage"`
+	InternationalDiscountPercentage         float64 `json:"internationalDiscountPercentage"`
+	Fx                                      struct {
+		Rate         float64 `json:"rate"`
+		CurrencyCode string  `json:"currencyCode"`
+	} `json:"fx"`
+	DenominationType          string      `json:"denominationType"`
+	LocalFixedAmounts         interface{} `json:"localFixedAmounts"`
+	InternationalFixedAmounts interface{} `json:"localFixedAmounts"`
+}
+
+type UtilBill struct {
+	SubscriberAccountNumber string      `json:"subscriberAccountNumber"`
+	Amount                  float64     `json:"amount"`
+	AmountID                interface{} `json:"amountId"` // Can be null
+	BillerID                int         `json:"billerId"`
+	UseLocalAmount          bool        `json:"useLocalAmount"`
+	ReferenceID             string      `json:"referenceId"`
+	AdditionalInfo          struct {
+		InvoiceID interface{} `json:"invoiceId"` // Can be null
+	} `json:"additionalInfo"`
 }

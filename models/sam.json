@@ -1,0 +1,60 @@
+{
+    "content": [
+        {
+    "id": 20,
+    "name": "Kenya Electricity Postpaid",
+    "countryCode": "KE",
+    "countryName": "Kenya",
+    "type": "ELECTRICITY_BILL_PAYMENT",
+    "serviceType": "POSTPAID",
+    "localAmountSupported": true,
+    "localTransactionCurrencyCode": "KES",
+    "minLocalTransactionAmount": 10.0,
+    "maxLocalTransactionAmount": 1000000.0,
+    "localTransactionFee": 128.15164,
+    "localTransactionFeeCurrencyCode": "KES",
+    "localDiscountPercentage": 0.00000,
+    "internationalAmountSupported": true,
+    "internationalTransactionCurrencyCode": "NGN",
+    "minInternationalTransactionAmount": 170.0,
+    "maxInternationalTransactionAmount": 1.3076927E7,
+    "internationalTransactionFee": 1700.00000,
+    "internationalTransactionFeeCurrencyCode": "NGN",
+    "localTransactionFeePercentage": 0.0,
+    "internationalTransactionFeePercentage": 0.0,
+    "internationalDiscountPercentage": 0.00000,
+    "fx": {
+        "rate": 0.062819429,
+        "currencyCode": "NGN"
+    },
+    "denominationType": "RANGE",
+    "localFixedAmounts": null,
+    "internationalFixedAmounts": null
+}
+],
+"pageable": {
+"sort": {
+    "unsorted": true,
+    "sorted": false,
+    "empty": true
+},
+"pageNumber": 0,
+"pageSize": 20,
+"offset": 0,
+"unpaged": false,
+"paged": true
+},
+"totalPages": 2,
+"last": false,
+"totalElements": 29,
+"first": true,
+"sort": {
+"unsorted": true,
+"sorted": false,
+"empty": true
+},
+"numberOfElements": 20,
+"size": 20,
+"number": 0,
+"empty": false
+}
