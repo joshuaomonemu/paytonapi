@@ -28,7 +28,7 @@ func Routes() {
 
 	r.HandleFunc("/airtime/load", controller.Airtime).Methods("POST")
 
-	r.HandleFunc("/util/billers", controller.LoadBillers).Methods("POST")
+	r.HandleFunc("/util/billers", controller.LoadBillers).Methods("GET")
 	r.HandleFunc("/util/bill/pay", controller.PayBill).Methods("POST")
 
 	r.HandleFunc("/giftcard/all", controller.GetGiftCards).Methods("GET")

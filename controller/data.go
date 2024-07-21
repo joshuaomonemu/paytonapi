@@ -15,6 +15,12 @@ import (
 func Data(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	network := params["id"]
+	if network == "0" {
+		network = "mtn-data"
+	} else if network == "1" {
+		network = "airtel-data"
+	}
+	fmt.Println(network)
 	resp, err := models.Data(network)
 	if err != nil {
 		io.WriteString(w, err.Error())
