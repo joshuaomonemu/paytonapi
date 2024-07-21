@@ -12,8 +12,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Smile(w http.ResponseWriter, r *http.Request) {
-	resp, err := models.Smile()
+func Data(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	network := params["id"]
+	resp, err := models.Data(network)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
@@ -46,34 +48,19 @@ func Smile(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func SmileVerify(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	biller := params["id"]
-	provider := "smile-direct"
-	resp, err := models.SmileVerify(biller, provider)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		w.WriteHeader(500)
-		return
-	}
-
-	io.WriteString(w, string(resp))
-
-}
-
-func SmilePay(w http.ResponseWriter, r *http.Request) {
+func DataPay(w http.ResponseWriter, r *http.Request) {
 
 	// Generate the full request ID
 	reqID, _ := helper.GenerateRequestID(12)
 
 	params := mux.Vars(r)
 	biller := params["id"]
-	provider := "smile-direct"
+	provider := r.Header.Get("provider")
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	variation_code := r.Header.Get("variation_code")
 
-	resp, err := models.SmilePay(biller, provider, amount, phone, variation_code, reqID)
+	resp, err := models.DataPay(biller, provider, amount, phone, variation_code, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)

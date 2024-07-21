@@ -43,6 +43,10 @@ func Routes() {
 
 	r.HandleFunc("/internet/smile", controller.Smile).Methods("GET")
 	r.HandleFunc("/internet/smile/{id}", controller.Smile).Methods("POST")
+	r.HandleFunc("/internet/smile/pay/{id}", controller.SmilePay).Methods("POST")
+
+	r.HandleFunc("/data/all/{id}", controller.Data).Methods("GET")
+	r.HandleFunc("/data/all/pay/{id}", controller.DataPay).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
