@@ -24,10 +24,25 @@ func Routes() {
 	}
 
 	//Endpoints and Route points for users
+	r.HandleFunc("/auth/token", controller.Auth).Methods("POST")
+
 	r.HandleFunc("/airtime/load", controller.Airtime).Methods("POST")
+
 	r.HandleFunc("/util/billers", controller.LoadBillers).Methods("POST")
 	r.HandleFunc("/util/bill/pay", controller.PayBill).Methods("POST")
+
+	r.HandleFunc("/giftcard/all", controller.GetGiftCards).Methods("GET")
+
+	r.HandleFunc("/cable/dstv", controller.Dstv).Methods("GET")
+	r.HandleFunc("/cable/dstv/verify/{id}", controller.DstvVerify).Methods("POST")
+	r.HandleFunc("/cable/dstv/pay/{id}", controller.DstvPay).Methods("POST")
 	//r.HandleFunc("/billers/validate", controller.CustomerValidation).Methods("POST")
+	r.HandleFunc("/cable/gotv", controller.Gotv).Methods("GET")
+	r.HandleFunc("/cable/gotv/verify/{id}", controller.GotvVerify).Methods("POST")
+	r.HandleFunc("/cable/gotv/pay/{id}", controller.GotvPay).Methods("POST")
+
+	r.HandleFunc("/internet/smile", controller.Smile).Methods("GET")
+	r.HandleFunc("/internet/smile/{id}", controller.Smile).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }

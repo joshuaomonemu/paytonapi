@@ -115,3 +115,22 @@ type UtilBill struct {
 		InvoiceID interface{} `json:"invoiceId"` // Can be null
 	} `json:"additionalInfo"`
 }
+
+type Response struct {
+	ResponseDescription string  `json:"response_description"`
+	Content             Content `json:"content"`
+}
+
+type Content struct {
+	ServiceName    string      `json:"ServiceName"`
+	ServiceID      string      `json:"serviceID"`
+	ConvenienceFee string      `json:"convinience_fee"`
+	Variations     []Variation `json:"varations"`
+}
+
+type Variation struct {
+	VariationCode   string `json:"variation_code"`
+	Name            string `json:"name"`
+	VariationAmount string `json:"variation_amount"`
+	FixedPrice      string `json:"fixedPrice"`
+}

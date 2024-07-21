@@ -15,7 +15,7 @@ func Auth2() (string, error) {
 
 	url := "https://auth.reloadly.com/oauth/token"
 
-	payload := strings.NewReader("{\"client_id\":\"LrSJMJirX0iR3MB6AKj9G2P6Ui3YsXjO\",\"client_secret\":\"4PYVcPKzSv-SSI7ZKhHEC4fZ6rcF1X-2VCGByiWTjqT1FylCmq0OcIBMCoJAwGu\",\"grant_type\":\"client_credentials\",\"audience\":\"https://utilities-sandbox.reloadly.com\"}")
+	payload := strings.NewReader("{\"client_id\":\"LrSJMJirX0iR3MB6AKj9G2P6Ui3YsXjO\",\"client_secret\":\"ydGmgekGSB-8bj8mQuB5ElAdMMWm3A-e175DalsnwHRqwLb5R51Yf6i65dXwLUV\",\"grant_type\":\"client_credentials\",\"audience\":\"https://utilities-sandbox.reloadly.com\"}")
 
 	req, _ := http.NewRequest("POST", url, payload)
 

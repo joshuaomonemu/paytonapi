@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -17,18 +16,18 @@ func LoadBillers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//io.WriteString(w, string(resp))
-	var response *structs.ElectricityPaymentOption
-	err = json.Unmarshal(resp, &response)
-	if err != nil {
-		io.WriteString(w, err.Error())
-	}
+	// var response *structs.ElectricityPaymentOption
+	// err = json.Unmarshal(resp, &response)
+	// if err != nil {
+	// 	io.WriteString(w, err.Error())
+	// }
 
-	jsn, err := json.Marshal(response)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// jsn, err := json.Marshal(response)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	io.WriteString(w, string(jsn))
+	io.WriteString(w, string(resp))
 
 }
 

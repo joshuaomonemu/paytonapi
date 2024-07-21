@@ -10,6 +10,7 @@ import (
 var (
 	url11       = "https://utilities-sandbox.reloadly.com/billers"
 	url12       = "https://utilities-sandbox.reloadly.com/pay"
+	url31       = "https://giftcards-sandbox.reloadly.com/products?size=10&page=1&productName=Amazon&countryCode=US&productCategoryId=2&includeRange=true&includeFixed=true"
 	token, err2 = auth.Auth2()
 )
 
