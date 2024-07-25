@@ -118,9 +118,10 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 	provider := "dstv"
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
+	variation_code := r.Header.Get("variation_code")
 	subscription_type := r.Header.Get("subscription_type")
 
-	resp, err := models.DstvPay(biller, provider, amount, phone, subscription_type, reqID)
+	resp, err := models.DstvPay(biller, provider, amount, phone, subscription_type, variation_code, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)

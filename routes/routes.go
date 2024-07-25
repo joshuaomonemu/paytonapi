@@ -42,7 +42,7 @@ func Routes() {
 	r.HandleFunc("/cable/gotv/pay/{id}", controller.GotvPay).Methods("POST")
 
 	r.HandleFunc("/internet/smile", controller.Smile).Methods("GET")
-	r.HandleFunc("/internet/smile/{id}", controller.Smile).Methods("POST")
+	r.HandleFunc("/internet/smile/verify/{id}", controller.SmileVerify).Methods("POST")
 	r.HandleFunc("/internet/smile/pay/{id}", controller.SmilePay).Methods("POST")
 
 	r.HandleFunc("/data/all/{id}", controller.Data).Methods("GET")
