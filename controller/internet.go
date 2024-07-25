@@ -80,15 +80,15 @@ func SmilePay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response DstvResponse
+	// var response DstvResponse
 
-	err = json.Unmarshal(resp, &response)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		return
-	}
-	simp, _ := json.Marshal(response)
+	// err = json.Unmarshal(resp, &response)
+	// if err != nil {
+	// 	io.WriteString(w, err.Error())
+	// 	return
+	// }
+	// simp, _ := json.Marshal(response)
 
-	io.WriteString(w, string(simp))
+	io.WriteString(w, string(resp))
 
 }
