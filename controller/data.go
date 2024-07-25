@@ -19,6 +19,10 @@ func Data(w http.ResponseWriter, r *http.Request) {
 		network = "mtn-data"
 	} else if network == "1" {
 		network = "airtel-data"
+	} else if network == "2" {
+		network = "etisalat-data"
+	} else if network == "3" {
+		network = "glo-data"
 	}
 	fmt.Println(network)
 	resp, err := models.Data(network)
