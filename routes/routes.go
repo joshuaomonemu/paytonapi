@@ -36,7 +36,7 @@ func Routes() {
 	r.HandleFunc("/cable/dstv", controller.Dstv).Methods("GET")
 	r.HandleFunc("/cable/dstv/verify/{id}", controller.DstvVerify).Methods("POST")
 	r.HandleFunc("/cable/dstv/pay/{id}", controller.DstvPay).Methods("POST")
-	//r.HandleFunc("/billers/validate", controller.CustomerValidation).Methods("POST")
+
 	r.HandleFunc("/cable/gotv", controller.Gotv).Methods("GET")
 	r.HandleFunc("/cable/gotv/verify/{id}", controller.GotvVerify).Methods("POST")
 	r.HandleFunc("/cable/gotv/pay/{id}", controller.GotvPay).Methods("POST")
@@ -47,6 +47,9 @@ func Routes() {
 
 	r.HandleFunc("/data/all/{id}", controller.Data).Methods("GET")
 	r.HandleFunc("/data/all/pay/{id}", controller.DataPay).Methods("POST")
+
+	r.HandleFunc("/util/elect/verify/{id}", controller.ElectVerify).Methods("POST")
+	r.HandleFunc("/util/elect/pay/{id}", controller.ElectPay1).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
