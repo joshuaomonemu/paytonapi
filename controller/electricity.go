@@ -15,6 +15,34 @@ func ElectVerify(w http.ResponseWriter, r *http.Request) {
 	biller := params["id"]
 	provider := r.Header.Get("provider")
 	typer := r.Header.Get("type")
+
+	switch provider {
+	case "1":
+		provider = "ikeja-electric"
+	case "2":
+		provider = "eko-electric"
+	case "3":
+		provider = "kano-electric"
+	case "4":
+		provider = "portharcourt-electric"
+	case "5":
+		provider = "jos-electric"
+	case "6":
+		provider = "ibadan-electric"
+	case "7":
+		provider = "kaduna-electric"
+	case "8":
+		provider = "abuja-electric"
+	case "9":
+		provider = "enugu-electric"
+	case "10":
+		provider = "benin-electric"
+	case "11":
+		provider = "aba-electric"
+	case "12":
+		provider = "yola-electric"
+
+	}
 	resp, err := models.ElectVerify(biller, provider, typer)
 	if err != nil {
 		io.WriteString(w, err.Error())
