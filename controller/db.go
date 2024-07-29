@@ -16,12 +16,6 @@ func GetTrans(w http.ResponseWriter, r *http.Request) {
 
 	//bs1, _ := json.Marshal(billreq)
 
-	resp := db.GetTrans()
-	if err != nil {
-		io.WriteString(w, err.Error())
-		return
-	}
-
 	// var response *Structs.ElectricityPaymentOption
 	// err = json.Unmarshal(resp, &response)
 	// if err != nil {
@@ -34,5 +28,5 @@ func GetTrans(w http.ResponseWriter, r *http.Request) {
 	// 	log.Fatal(err)
 	// }
 	//fmt.Println(jsn)
-	io.WriteString(w, string(resp))
+	io.WriteString(w, db.GetTrans())
 }
