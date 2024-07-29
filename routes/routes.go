@@ -51,5 +51,7 @@ func Routes() {
 	r.HandleFunc("/util/elect/verify/{id}", controller.ElectVerify).Methods("POST")
 	r.HandleFunc("/util/elect/pay/{id}", controller.ElectPay1).Methods("POST")
 
+	r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
+
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
