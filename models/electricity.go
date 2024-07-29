@@ -52,7 +52,7 @@ func ElectVerify(biller, provider, typer string) ([]byte, error) {
 func ElectPay1(biller, provider, amount, phone, variation_code, request_id string) ([]byte, error) {
 
 	// Create a URL object from the base URL
-	u, err := url.Parse(dstv3)
+	u, err := url.Parse(elect2)
 	if err != nil {
 		fmt.Println("Error parsing URL:", err)
 		return nil, err

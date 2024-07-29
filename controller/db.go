@@ -7,26 +7,7 @@ import (
 )
 
 func GetTrans(w http.ResponseWriter, r *http.Request) {
+	db.InsertReq()
 
-	// bs, err := ioutil.ReadAll(r.Body)
-	// if err != nil {
-	// 	w.WriteHeader(406)
-	// }
-	// json.Unmarshal(bs, &billreq)
-
-	//bs1, _ := json.Marshal(billreq)
-
-	// var response *Structs.ElectricityPaymentOption
-	// err = json.Unmarshal(resp, &response)
-	// if err != nil {
-	// 	io.WriteString(w, err.Error())
-	// 	return
-	// }
-
-	// jsn, err := json.Marshal(response)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//fmt.Println(jsn)
-	io.WriteString(w, db.GetTrans())
+	io.WriteString(w, "db.GetTrans()")
 }

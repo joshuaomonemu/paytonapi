@@ -4,5 +4,5 @@ import "app/routes"
 
 func main() {
 	routes.Routes()
-	//db.GetTrans()
+	// db.InsertReq()
 }
