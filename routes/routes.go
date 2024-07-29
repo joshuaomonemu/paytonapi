@@ -53,5 +53,7 @@ func Routes() {
 
 	r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
 
+	r.HandleFunc("/user/transactions", controller.Transactions).Methods("GET")
+
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
