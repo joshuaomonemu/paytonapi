@@ -20,7 +20,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 	transactions := []Transaction12{
 		{
 			IconUrl: "https://example.com/icon1.png",
-			Title:   "Buy Giftcard",
+			Title:   "Buy Data",
 			Date:    "19 September, 2023",
 			Time:    "5:40 PM",
 			Amount:  "₦3,609.00",
@@ -28,7 +28,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 		},
 		{
 			IconUrl: "https://example.com/icon2.png",
-			Title:   "Buy Giftcard",
+			Title:   "Buy DsTv",
 			Date:    "19 September, 2023",
 			Time:    "5:31 PM",
 			Amount:  "₦22,060.00",
@@ -36,7 +36,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 		},
 		{
 			IconUrl: "https://example.com/icon3.png",
-			Title:   "Buy Giftcard",
+			Title:   "Recharge Meter",
 			Date:    "17 September, 2023",
 			Time:    "1:11 PM",
 			Amount:  "₦11,030.00",
@@ -44,7 +44,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 		},
 		{
 			IconUrl: "https://example.com/icon4.png",
-			Title:   "Buy Giftcard",
+			Title:   "Buy Airtime",
 			Date:    "17 September, 2023",
 			Time:    "3:30 PM",
 			Amount:  "₦5,000.00",
