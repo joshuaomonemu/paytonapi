@@ -19,7 +19,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 
 	transactions := []Transaction12{
 		{
-			IconUrl: "https://example.com/icon1.png",
+			IconUrl: "assets/images/data.png",
 			Title:   "Buy Data",
 			Date:    "19 September, 2023",
 			Time:    "5:40 PM",
@@ -27,7 +27,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 			Status:  "completed",
 		},
 		{
-			IconUrl: "https://example.com/icon2.png",
+			IconUrl: "assets/images/cable.png",
 			Title:   "Buy DsTv",
 			Date:    "19 September, 2023",
 			Time:    "5:31 PM",
@@ -35,7 +35,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 			Status:  "completed",
 		},
 		{
-			IconUrl: "https://example.com/icon3.png",
+			IconUrl: "assets/images/electricity.png",
 			Title:   "Recharge Meter",
 			Date:    "17 September, 2023",
 			Time:    "1:11 PM",
@@ -43,7 +43,7 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 			Status:  "completed",
 		},
 		{
-			IconUrl: "https://example.com/icon4.png",
+			IconUrl: "assets/images/airtime.png",
 			Title:   "Buy Airtime",
 			Date:    "17 September, 2023",
 			Time:    "3:30 PM",
