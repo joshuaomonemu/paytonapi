@@ -51,6 +51,8 @@ func Routes() {
 	r.HandleFunc("/util/elect/verify/{id}", controller.ElectVerify).Methods("POST")
 	r.HandleFunc("/util/elect/pay/{id}", controller.ElectPay1).Methods("POST")
 
+	r.HandleFunc("/phone/pay", controller.PhonePay).Methods("POST")
+
 	r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
 
 	r.HandleFunc("/user/transactions", controller.Transactions).Methods("GET")
