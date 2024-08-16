@@ -43,3 +43,23 @@ func generateRandomString(length int) (string, error) {
 
 	return string(bytes), nil
 }
+
+func GetDate() string {
+	currentDate := time.Now()
+
+	// Format the date
+	formattedDate := currentDate.Format("02 January, 2006")
+
+	// Print the formatted date
+	return formattedDate
+}
+
+func GetTime() string {
+	currentTime := time.Now()
+
+	// Format the time
+	formattedTime := currentTime.Format("3:04 PM")
+
+	// Print the formatted time
+	return formattedTime
+}

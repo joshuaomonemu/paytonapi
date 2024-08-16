@@ -2,59 +2,198 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
+	"encoding/json"
+	"errors"
+	"log"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func InsertReq() {
-	db, err := connectToMySQL()
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close() // Close the database connection when the function exits
-
-	// Sample query to select data from a table
-	rows, err := db.Query("SELECT * FROM transactions")
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close() // Close the result set
-
-	// Scan the results
-	for rows.Next() {
-		var id int
-		var name string
-		err := rows.Scan(&id, &name)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Println("ID:", id, "Name:", name)
-	}
-
-	if err := rows.Err(); err != nil {
-		panic(err)
-	}
+// Struct to hold table data
+type User struct {
+	ID     int
+	FName  string
+	LName  string
+	Email  string
+	Wallet string
+}
+type Transaction struct {
+	IconUrl string `json:"icon_url"`
+	Title   string `json:"title"`
+	Date    string `json:"date"`
+	Time    string `json:"time"`
+	Amount  string `json:"amount"`
+	Status  string `json:"status"`
+	User    string `json:"user"`
 }
 
-func connectToMySQL() (*sql.DB, error) {
-	// Replace with your actual credentials
-	dbUser := "hhhhco_testuser"
-	dbPassword := "mylovefordogs"
-	dbName := "hhhhco_test"
-	dbHost := "54.38.50.173" // This could be "localhost" or the cPanel server's hostname/IP
-	dbPort := "3306"         // Standard MySQL port
+type TransactionPayload struct {
+	IconUrl string `json:"icon_url"`
+	Title   string `json:"title"`
+	Date    string `json:"date"`
+	Time    string `json:"time"`
+	Amount  string `json:"amount"`
+	Status  string `json:"status"`
+}
 
-	connectionString := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName
+func Conn() *sql.DB {
+	// Database connection string
+	// Format: username:password@tcp(localhost:3306)/dbname
+	dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:2083)/ineracsi_payment_app"
+	//dsn := "root:@tcp(127.0.0.1:3306)/test"
 
-	db, err := sql.Open("mysql", connectionString)
+	// Open a connection to the database
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
+	}
+	//defer db.Close()
+
+	// Ping the database to verify connection
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
+}
+
+func GetTransactions(id string) []byte {
+	db := Conn()
+	// Query to fetch data from the table
+	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ?", id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Slice to hold the results
+	var transactions []TransactionPayload
+
+	// Iterate over the rows
+	for rows.Next() {
+		var transaction TransactionPayload
+		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
+		if err != nil {
+			log.Fatal(err)
+		}
+		transactions = append(transactions, transaction)
 	}
 
-	if err := db.Ping(); err != nil {
-		return nil, err
+	// Check for errors from iterating over rows
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	return db, nil
+	// Print the results
+	//for _, transaction := range transactions {
+	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
+	//}
+	bs, _ := json.Marshal(transactions)
+	return bs
+
+}
+
+func SetTransaction(transaction *Transaction) error {
+	db := Conn()
+	query := `INSERT INTO transactions (iconurl, title, date, time, amount, status, user) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
+	return err
+}
+
+func GetUser() []User {
+	db := Conn()
+	// Query to fetch data from the table
+	rows, err := db.Query("SELECT id, fname, lname, email, wallet FROM users")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// Slice to hold the results
+	var users []User
+
+	// Iterate over the rows
+	for rows.Next() {
+		var user User
+		err := rows.Scan(&user.ID, &user.FName, &user.LName, &user.Email, &user.Wallet)
+		if err != nil {
+			log.Fatal(err)
+		}
+		users = append(users, user)
+	}
+
+	// Check for errors from iterating over rows
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Print the results
+	// for _, user := range users {
+	// 	fmt.Printf("ID: %d, FName: %s, LName: %s, Email: %s\n", user.ID, user.FName, user.LName, user.Email)
+	// }
+	return users
+}
+
+func CheckBalance(amount, email string) (error, string) {
+	db := Conn()
+	// Convert amount to float64
+	amt, err := strconv.ParseFloat(amount, 64)
+	if err != nil {
+		return err, ""
+	}
+
+	var wallet float64
+	query := "SELECT wallet FROM users WHERE email = ?"
+	err = db.QueryRow(query, email).Scan(&wallet)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("no user found with the provided email"), ""
+		}
+		return err, ""
+	}
+
+	if amt > wallet {
+		return errors.New("error"), ""
+	}
+
+	return nil, "okay"
+}
+
+func UpdateBalance(email, amount string) error {
+	db := Conn()
+	query := `UPDATE users SET wallet = ? WHERE email = ?`
+	_, err := db.Exec(query, amount, email)
+	return err
+}
+
+func WalletTrans(amount, email string) (error, string) {
+	db := Conn()
+	// Convert amount to float64
+	amt, err := strconv.ParseFloat(amount, 64)
+	if err != nil {
+		return err, ""
+	}
+
+	var wallet float64
+	query := "SELECT wallet FROM users WHERE email = ?"
+	err = db.QueryRow(query, email).Scan(&wallet)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("no user found with the provided email"), ""
+		}
+		return err, ""
+	}
+	new_bal := wallet - amt
+	query1 := `UPDATE users SET wallet = ? WHERE email = ?`
+
+	_, err = db.Exec(query1, new_bal, email)
+	if err != nil {
+		return err, ""
+	}
+
+	return nil, "okay"
 }

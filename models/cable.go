@@ -14,9 +14,9 @@ var (
 	gotv1  = "https://sandbox.vtpass.com/api/service-variations?serviceID=gotv"
 	gotv2  = "https://sandbox.vtpass.com/api/merchant-verify"
 	gotv3  = "https://sandbox.vtpass.com/api/pay"
-	api    = "32df63541769801bb3eeb6f27adc7aee"
-	public = "PK_6854c82218c91035ef2443b7981df35488dcc83c43d"
-	secret = "SK_131dcd9933521bd3ac981835e66165b0862df27566e"
+	api    = "6106a6abec1114cc73e59c24b634d6c4"
+	public = "PK_815a6f5181ad8fd419211b562f78b2f40ad82cb069b"
+	secret = "SK_702b42ac6d09c76454497157fea027a4ca7c7809456"
 )
 
 func Dstv() ([]byte, error) {

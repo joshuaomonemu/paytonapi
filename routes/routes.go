@@ -2,6 +2,7 @@ package routes
 
 import (
 	"app/controller"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -19,9 +20,10 @@ func Routes() {
 	// Api for User
 	//r.HandleFunc("/controller/user/get{id}", controller.GetUser).Methods("GET")
 	port := os.Getenv("PORT")
-	if port == "" {
-		port = "2020" // Set a default port for development purposes (can be removed for production)
-	}
+	//port := "2020"
+	// if port == "" {
+	// 	port = "2020" // Set a default port for development purposes (can be removed for production)
+	// }
 
 	//Endpoints and Route points for users
 	r.HandleFunc("/auth/token", controller.Auth).Methods("POST")
@@ -56,6 +58,11 @@ func Routes() {
 	r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
 
 	r.HandleFunc("/user/transactions", controller.Transactions).Methods("GET")
+	r.HandleFunc("/user/transactions/{id}", controller.GetTrans).Methods("GET")
 
+	r.HandleFunc("/user/all", controller.Users).Methods("GET")
+	r.HandleFunc("/user/pay", controller.UpdateWallet).Methods("POST")
+
+	fmt.Println("running on port" + port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }

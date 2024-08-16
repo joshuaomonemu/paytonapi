@@ -8,13 +8,13 @@ import (
 )
 
 var (
-	phone = "https://sandbox.vtpass.com/api/pay"
+	phoneurl = "https://sandbox.vtpass.com/api/pay"
 )
 
 func PhonePay(provider, amount, phone, request_id string) ([]byte, error) {
 
 	// Create a URL object from the base URL
-	u, err := url.Parse(dstv3)
+	u, err := url.Parse(phoneurl)
 	if err != nil {
 		fmt.Println("Error parsing URL:", err)
 		return nil, err

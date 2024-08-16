@@ -72,6 +72,9 @@ func SmilePay(w http.ResponseWriter, r *http.Request) {
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	variation_code := r.Header.Get("variation_code")
+	// email := r.Header.Get("email")
+	// date := helper.GetDate()
+	// time := helper.GetTime()
 
 	resp, err := models.SmilePay(biller, provider, amount, phone, variation_code, reqID)
 	if err != nil {
@@ -79,6 +82,20 @@ func SmilePay(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		return
 	}
+
+	// trans := &db.Transaction{
+	// 	IconUrl: "siplo",
+	// 	Title:   provider,
+	// 	Date:    date,
+	// 	Time:    time,
+	// 	Amount:  amount,
+	// 	Status:  "Completed",
+	// 	User:    email,
+	// }
+	// err1 := db.SetTransaction(trans)
+	// if err1 != nil {
+	// 	w.WriteHeader(409)
+	// }
 
 	// var response DstvResponse
 

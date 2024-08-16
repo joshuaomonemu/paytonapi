@@ -1,10 +1,16 @@
 package controller
 
 import (
+	"app/db"
 	"app/helper"
 	"app/models"
+	"encoding/json"
 	"io"
 	"net/http"
+)
+
+var (
+	trans_stat = ""
 )
 
 func PhonePay(w http.ResponseWriter, r *http.Request) {
@@ -15,6 +21,15 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 	provider := r.Header.Get("provider")
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
+	email := r.Header.Get("email")
+	date := helper.GetDate()
+	time := helper.GetTime()
+
+	err, _ := db.CheckBalance(amount, email)
+	if err != nil {
+		w.WriteHeader(402)
+		return
+	}
 
 	if provider == "0" {
 		provider = "mtn"
@@ -31,6 +46,44 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
+	}
+
+	var response DstvResponse
+
+	err = json.Unmarshal(resp, &response)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+
+	if response.Code != "000" {
+		trans_stat = "Declined"
+		trans := &db.Transaction{
+			IconUrl: "assets/images/airtime.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		db.SetTransaction(trans)
+		w.WriteHeader(400)
+		return
+	} else {
+		trans_stat = "Approved"
+		db.WalletTrans(amount, email)
+		trans_stat = "Declined"
+		trans := &db.Transaction{
+			IconUrl: "assets/images/airtime.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		db.SetTransaction(trans)
 	}
 
 	// err = json.Unmarshal(resp, &response)
