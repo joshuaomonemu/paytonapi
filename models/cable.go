@@ -15,7 +15,7 @@ var (
 	gotv2  = "https://sandbox.vtpass.com/api/merchant-verify"
 	gotv3  = "https://sandbox.vtpass.com/api/pay"
 	api    = "6106a6abec1114cc73e59c24b634d6c4"
-	public = "PK_815a6f5181ad8fd419211b562f78b2f40ad82cb069b"
+	public = "PK_166ceaad02aabf895f39a5dcde3adc7d8d45f654efa"
 	secret = "SK_702b42ac6d09c76454497157fea027a4ca7c7809456"
 )
 
