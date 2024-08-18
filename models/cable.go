@@ -15,8 +15,8 @@ var (
 	gotv2  = "https://sandbox.vtpass.com/api/merchant-verify"
 	gotv3  = "https://sandbox.vtpass.com/api/pay"
 	api    = "6106a6abec1114cc73e59c24b634d6c4"
-	public = "PK_166ceaad02aabf895f39a5dcde3adc7d8d45f654efa"
-	secret = "SK_702b42ac6d09c76454497157fea027a4ca7c7809456"
+	public = "PK_3848b4365f111a6bd186fcf9be401c4da86d92d9a5a"
+	secret = "SK_514a719059bf25078427bd53a23499b5f2f4eab5aaf"
 )
 
 func Dstv() ([]byte, error) {
