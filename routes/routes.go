@@ -55,13 +55,13 @@ func Routes() {
 
 	r.HandleFunc("/phone/pay", controller.PhonePay).Methods("POST")
 
-	r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
+	// r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
 
 	r.HandleFunc("/user/transactions", controller.Transactions).Methods("GET")
-	r.HandleFunc("/user/transactions/{id}", controller.GetTrans).Methods("GET")
+	// r.HandleFunc("/user/transactions/{id}", controller.GetTrans).Methods("GET")
 
 	r.HandleFunc("/user/all", controller.Users).Methods("GET")
-	r.HandleFunc("/user/pay", controller.UpdateWallet).Methods("POST")
+	// r.HandleFunc("/user/pay", controller.UpdateWallet).Methods("POST")
 
 	fmt.Println("running on port" + port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
