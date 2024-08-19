@@ -9,7 +9,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -51,18 +50,18 @@ func ProxyConn(fixieUrl string, username string, password string, dbName string)
 
 	// Create a new HTTP transport with the Fixie proxy
 	httpTransport := &http.Transport{
-		Proxy:               http.ProxyURL(fixieProxyUrl),
-		TLSHandshakeTimeout: 50 * time.Second,
+		Proxy: http.ProxyURL(fixieProxyUrl),
 	}
 
 	// Register a custom dialer for the MySQL driver
-	mysql.RegisterDialContext("54.38.50.173", func(ctx context.Context, addr string) (net.Conn, error) {
+	mysql.RegisterDialContext("mysql-proxy", func(ctx context.Context, addr string) (net.Conn, error) {
 		// Create a new proxy connection to the remote database
+		addr = "54.38.50.173"
 		return httpTransport.DialContext(ctx, "tcp", addr)
 	})
 
 	// Create a new database connection using the proxy dialer
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(54.38.50.173)/%s", username, password, dbName))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(mysql-proxy)/%s", username, password, dbName))
 	if err != nil {
 		return nil, err
 	}
