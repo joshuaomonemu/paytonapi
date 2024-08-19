@@ -9,7 +9,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"os"
+	"time"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -51,7 +51,8 @@ func ProxyConn(fixieUrl string, username string, password string, dbName string)
 
 	// Create a new HTTP transport with the Fixie proxy
 	httpTransport := &http.Transport{
-		Proxy: http.ProxyURL(fixieProxyUrl),
+		Proxy:               http.ProxyURL(fixieProxyUrl),
+		TLSHandshakeTimeout: 50 * time.Second,
 	}
 
 	// Register a custom dialer for the MySQL driver
@@ -82,7 +83,7 @@ func Conn() (*sql.DB, error) {
 	// }
 	//defer db.Close()
 	// Get the Fixie URL from the Heroku environment variable
-	fixieUrl := os.Getenv("http://fixie:UbuzTDFXKE2kciz@velodrome.usefixie.com:80")
+	fixieUrl := "http://fixie:UbuzTDFXKE2kciz@velodrome.usefixie.com:80"
 	username := "ineracsi_baker"
 	password := "Goodmorning11."
 	dbName := "ineracsi_payment_app"
