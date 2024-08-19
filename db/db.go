@@ -93,10 +93,10 @@ func Conn() (*sql.DB, error) {
 	}
 
 	// Ping the database to verify connection
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// err = db.Ping()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	return db, err
 }
 
