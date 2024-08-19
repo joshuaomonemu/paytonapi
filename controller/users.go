@@ -7,12 +7,6 @@ import (
 	"net/http"
 )
 
-func Index(w http.ResponseWriter, r *http.Request) {
-
-	io.WriteString(w, "<h1>WELCOME TO PAYTON</h1>")
-
-}
-
 func Users(w http.ResponseWriter, r *http.Request) {
 
 	users := db.GetUser()

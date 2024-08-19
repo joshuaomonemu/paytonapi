@@ -1,13 +1,19 @@
 package db
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
+	"net"
+	"net/http"
+	"net/url"
+	"os"
 	"strconv"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 )
 
 // Struct to hold table data
@@ -37,18 +43,57 @@ type TransactionPayload struct {
 	Status  string `json:"status"`
 }
 
+func ProxyConn(fixieUrl string, username string, password string, dbName string) (*sql.DB, error) {
+	// Parse the Fixie URL
+	fixieProxyUrl, err := url.Parse(fixieUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create a new HTTP transport with the Fixie proxy
+	httpTransport := &http.Transport{
+		Proxy: http.ProxyURL(fixieProxyUrl),
+	}
+
+	// Register a custom dialer for the MySQL driver
+	mysql.RegisterDialContext("mysql-proxy", func(ctx context.Context, addr string) (net.Conn, error) {
+		// Create a new proxy connection to the remote database
+		return httpTransport.DialContext(ctx, "tcp", addr)
+	})
+
+	// Create a new database connection using the proxy dialer
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(mysql-proxy)/%s", username, password, dbName))
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
 func Conn() *sql.DB {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
-	dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:2083)/ineracsi_payment_app"
+	//dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:2083)/ineracsi_payment_app"
 	//dsn := "root:@tcp(127.0.0.1:3306)/test"
 
 	// Open a connection to the database
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
-		log.Fatal(err)
-	}
+	// db, err := sql.Open("mysql", dsn)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	//defer db.Close()
+	// Get the Fixie URL from the Heroku environment variable
+	fixieUrl := os.Getenv("http://fixie:UbuzTDFXKE2kciz@velodrome.usefixie.com:80")
+	username := "ineracsi_baker"
+	password := "Goodmorning11."
+	dbName := "ineracsi_payment_app"
+
+	// Open the database connection
+	db, err := ProxyConn(fixieUrl, username, password, dbName)
+	if err != nil {
+		fmt.Println(err)
+
+	}
 
 	// Ping the database to verify connection
 	err = db.Ping()
