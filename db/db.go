@@ -41,8 +41,11 @@ type TransactionPayload struct {
 	Status  string `json:"status"`
 }
 
+var ()
+
 func ProxyConn(fixieUrl string, username string, password string, dbName string) (*sql.DB, error) {
 	// Parse the Fixie URL
+
 	fixieProxyUrl, err := url.Parse(fixieUrl)
 	if err != nil {
 		return nil, err
@@ -56,6 +59,7 @@ func ProxyConn(fixieUrl string, username string, password string, dbName string)
 	// Register a custom dialer for the MySQL driver
 	mysql.RegisterDialContext("mysql-proxy", func(ctx context.Context, addr string) (net.Conn, error) {
 		// Create a new proxy connection to the remote database
+		addr = "54.38.50.173"
 		return httpTransport.DialContext(ctx, "tcp", addr)
 	})
 
