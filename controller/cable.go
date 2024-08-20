@@ -198,7 +198,7 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	biller := params["id"]
-	provider := "dstv"
+	provider := "gotv"
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	subscription_type := r.Header.Get("subscription_type")
