@@ -9,11 +9,11 @@ import (
 
 func Users(w http.ResponseWriter, r *http.Request) {
 
-	users, err := db.GetUser()
-	if err != nil {
-		io.WriteString(w, string(err.Error()))
-		return
-	}
+	users := db.GetUser()
+	// if err != nil {
+	// 	io.WriteString(w, string(err.Error()))
+	// 	return
+	// }
 	bs, _ := json.Marshal(users)
 
 	io.WriteString(w, string(bs))
