@@ -2,10 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"encoding/json"
-	"errors"
-	"log"
-	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -37,7 +33,7 @@ type TransactionPayload struct {
 	Status  string `json:"status"`
 }
 
-func Conn() *sql.DB {
+func Conn() (*sql.DB, error) {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
 	dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:3306)/ineracsi_payment_app"
@@ -46,71 +42,71 @@ func Conn() *sql.DB {
 	// Open a connection to the database
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	//defer db.Close()
 
 	// Ping the database to verify connection
 	err = db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return db
+	return db, nil
 }
 
-func GetTransactions(id string) []byte {
-	db := Conn()
-	// Query to fetch data from the table
-	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ?", id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
+// func GetTransactions(id string) []byte {
+// 	db := Conn()
+// 	// Query to fetch data from the table
+// 	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ?", id)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer rows.Close()
 
-	// Slice to hold the results
-	var transactions []TransactionPayload
+// 	// Slice to hold the results
+// 	var transactions []TransactionPayload
 
-	// Iterate over the rows
-	for rows.Next() {
-		var transaction TransactionPayload
-		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
-		if err != nil {
-			log.Fatal(err)
-		}
-		transactions = append(transactions, transaction)
-	}
+// 	// Iterate over the rows
+// 	for rows.Next() {
+// 		var transaction TransactionPayload
+// 		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		transactions = append(transactions, transaction)
+// 	}
 
-	// Check for errors from iterating over rows
-	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	// Check for errors from iterating over rows
+// 	err = rows.Err()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	// Print the results
-	//for _, transaction := range transactions {
-	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
-	//}
-	bs, _ := json.Marshal(transactions)
-	return bs
+// 	// Print the results
+// 	//for _, transaction := range transactions {
+// 	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
+// 	//}
+// 	bs, _ := json.Marshal(transactions)
+// 	return bs
 
-}
+// }
 
-func SetTransaction(transaction *Transaction) error {
-	db := Conn()
-	query := `INSERT INTO transactions (iconurl, title, date, time, amount, status, user) 
-              VALUES (?, ?, ?, ?, ?, ?, ?)`
-	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
-	return err
-}
+// func SetTransaction(transaction *Transaction) error {
+// 	db := Conn()
+// 	query := `INSERT INTO transactions (iconurl, title, date, time, amount, status, user)
+//               VALUES (?, ?, ?, ?, ?, ?, ?)`
+// 	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
+// 	return err
+// }
 
-func GetUser() []User {
-	db := Conn()
+func GetUser() ([]User, error) {
+	db, err := Conn()
 	// Query to fetch data from the table
 	rows, err := db.Query("SELECT id, fname, lname, email, wallet FROM users")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	defer rows.Close()
+	//defer rows.Close()
 
 	// Slice to hold the results
 	var users []User
@@ -120,7 +116,7 @@ func GetUser() []User {
 		var user User
 		err := rows.Scan(&user.ID, &user.FName, &user.LName, &user.Email, &user.Wallet)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 		users = append(users, user)
 	}
@@ -128,72 +124,72 @@ func GetUser() []User {
 	// Check for errors from iterating over rows
 	err = rows.Err()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	// Print the results
 	// for _, user := range users {
 	// 	fmt.Printf("ID: %d, FName: %s, LName: %s, Email: %s\n", user.ID, user.FName, user.LName, user.Email)
 	// }
-	return users
+	return users, nil
 }
 
-func CheckBalance(amount, email string) (error, string) {
-	db := Conn()
-	// Convert amount to float64
-	amt, err := strconv.ParseFloat(amount, 64)
-	if err != nil {
-		return err, ""
-	}
+// func CheckBalance(amount, email string) (error, string) {
+// 	db := Conn()
+// 	// Convert amount to float64
+// 	amt, err := strconv.ParseFloat(amount, 64)
+// 	if err != nil {
+// 		return err, ""
+// 	}
 
-	var wallet float64
-	query := "SELECT wallet FROM users WHERE email = ?"
-	err = db.QueryRow(query, email).Scan(&wallet)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return errors.New("no user found with the provided email"), ""
-		}
-		return err, ""
-	}
+// 	var wallet float64
+// 	query := "SELECT wallet FROM users WHERE email = ?"
+// 	err = db.QueryRow(query, email).Scan(&wallet)
+// 	if err != nil {
+// 		if err == sql.ErrNoRows {
+// 			return errors.New("no user found with the provided email"), ""
+// 		}
+// 		return err, ""
+// 	}
 
-	if amt > wallet {
-		return errors.New("error"), ""
-	}
+// 	if amt > wallet {
+// 		return errors.New("error"), ""
+// 	}
 
-	return nil, "okay"
-}
+// 	return nil, "okay"
+// }
 
-func UpdateBalance(email, amount string) error {
-	db := Conn()
-	query := `UPDATE users SET wallet = ? WHERE email = ?`
-	_, err := db.Exec(query, amount, email)
-	return err
-}
+// func UpdateBalance(email, amount string) error {
+// 	db := Conn()
+// 	query := `UPDATE users SET wallet = ? WHERE email = ?`
+// 	_, err := db.Exec(query, amount, email)
+// 	return err
+// }
 
-func WalletTrans(amount, email string) (error, string) {
-	db := Conn()
-	// Convert amount to float64
-	amt, err := strconv.ParseFloat(amount, 64)
-	if err != nil {
-		return err, ""
-	}
+// func WalletTrans(amount, email string) (error, string) {
+// 	db := Conn()
+// 	// Convert amount to float64
+// 	amt, err := strconv.ParseFloat(amount, 64)
+// 	if err != nil {
+// 		return err, ""
+// 	}
 
-	var wallet float64
-	query := "SELECT wallet FROM users WHERE email = ?"
-	err = db.QueryRow(query, email).Scan(&wallet)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return errors.New("no user found with the provided email"), ""
-		}
-		return err, ""
-	}
-	new_bal := wallet - amt
-	query1 := `UPDATE users SET wallet = ? WHERE email = ?`
+// 	var wallet float64
+// 	query := "SELECT wallet FROM users WHERE email = ?"
+// 	err = db.QueryRow(query, email).Scan(&wallet)
+// 	if err != nil {
+// 		if err == sql.ErrNoRows {
+// 			return errors.New("no user found with the provided email"), ""
+// 		}
+// 		return err, ""
+// 	}
+// 	new_bal := wallet - amt
+// 	query1 := `UPDATE users SET wallet = ? WHERE email = ?`
 
-	_, err = db.Exec(query1, new_bal, email)
-	if err != nil {
-		return err, ""
-	}
+// 	_, err = db.Exec(query1, new_bal, email)
+// 	if err != nil {
+// 		return err, ""
+// 	}
 
-	return nil, "okay"
-}
+// 	return nil, "okay"
+// }
