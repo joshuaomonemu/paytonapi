@@ -1,16 +1,9 @@
 package db
 
 import (
-	"context"
 	"database/sql"
-	"encoding/json"
-	"fmt"
-	"log"
-	"net"
-	"net/http"
-	"net/url"
 
-	"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // Struct to hold table data
@@ -40,103 +33,63 @@ type TransactionPayload struct {
 	Status  string `json:"status"`
 }
 
-func ProxyConn(fixieUrl string, username string, password string, dbName string) (*sql.DB, error) {
-	// Parse the Fixie URL
-
-	fixieProxyUrl, err := url.Parse(fixieUrl)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create a new HTTP transport with the Fixie proxy
-	httpTransport := &http.Transport{
-		Proxy: http.ProxyURL(fixieProxyUrl),
-	}
-
-	// Register a custom dialer for the MySQL driver
-	mysql.RegisterDialContext("54.38.50.173", func(ctx context.Context, addr string) (net.Conn, error) {
-		// Create a new proxy connection to the remote database
-
-		return httpTransport.DialContext(ctx, "tcp", addr)
-	})
-
-	// Create a new database connection using the proxy dialer
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(54.38.50.173)/%s", username, password, dbName))
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
 func Conn() (*sql.DB, error) {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
-	//dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:2083)/ineracsi_payment_app"
+	dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:3306)/ineracsi_payment_app"
 	//dsn := "root:@tcp(127.0.0.1:3306)/test"
 
 	// Open a connection to the database
-	// db, err := sql.Open("mysql", dsn)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//defer db.Close()
-	// Get the Fixie URL from the Heroku environment variable
-	fixieUrl := "http://fixie:UbuzTDFXKE2kciz@velodrome.usefixie.com:80"
-	username := "ineracsi_baker"
-	password := "Goodmorning11."
-	dbName := "ineracsi_payment_app"
-
-	// Open the database connection
-	db, err := ProxyConn(fixieUrl, username, password, dbName)
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return db, err
+		return nil, err
 	}
+	//defer db.Close()
 
 	// Ping the database to verify connection
-	// err = db.Ping()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	return db, err
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
 
-func GetTransactions(id string) ([]byte, error) {
-	db, err := Conn()
-	// Query to fetch data from the table
-	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ?", id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
+// func GetTransactions(id string) []byte {
+// 	db := Conn()
+// 	// Query to fetch data from the table
+// 	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ?", id)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer rows.Close()
 
-	// Slice to hold the results
-	var transactions []TransactionPayload
+// 	// Slice to hold the results
+// 	var transactions []TransactionPayload
 
-	// Iterate over the rows
-	for rows.Next() {
-		var transaction TransactionPayload
-		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
-		if err != nil {
-			log.Fatal(err)
-		}
-		transactions = append(transactions, transaction)
-	}
+// 	// Iterate over the rows
+// 	for rows.Next() {
+// 		var transaction TransactionPayload
+// 		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		transactions = append(transactions, transaction)
+// 	}
 
-	// Check for errors from iterating over rows
-	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	// Check for errors from iterating over rows
+// 	err = rows.Err()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	// Print the results
-	//for _, transaction := range transactions {
-	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
-	//}
-	bs, _ := json.Marshal(transactions)
-	return bs, err
+// 	// Print the results
+// 	//for _, transaction := range transactions {
+// 	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
+// 	//}
+// 	bs, _ := json.Marshal(transactions)
+// 	return bs
 
-}
+// }
 
 // func SetTransaction(transaction *Transaction) error {
 // 	db := Conn()
@@ -147,16 +100,13 @@ func GetTransactions(id string) ([]byte, error) {
 // }
 
 func GetUser() ([]User, error) {
-	db, err1 := Conn()
-	if err1 != nil {
-		return nil, err1
-	}
+	db, err := Conn()
 	// Query to fetch data from the table
 	rows, err := db.Query("SELECT id, fname, lname, email, wallet FROM users")
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	//defer rows.Close()
 
 	// Slice to hold the results
 	var users []User
@@ -181,7 +131,7 @@ func GetUser() ([]User, error) {
 	// for _, user := range users {
 	// 	fmt.Printf("ID: %d, FName: %s, LName: %s, Email: %s\n", user.ID, user.FName, user.LName, user.Email)
 	// }
-	return users, err
+	return users, nil
 }
 
 // func CheckBalance(amount, email string) (error, string) {
