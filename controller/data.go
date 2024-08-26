@@ -70,6 +70,16 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 	phone := r.Header.Get("phone")
 	variation_code := r.Header.Get("variation_code")
 
+	if provider == "0" {
+		provider = "mtn-data"
+	} else if provider == "1" {
+		provider = "airtel-data"
+	} else if provider == "2" {
+		provider = "etisalat-data"
+	} else if provider == "3" {
+		provider = "glo-data"
+	}
+
 	resp, err := models.DataPay(biller, provider, amount, phone, variation_code, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
