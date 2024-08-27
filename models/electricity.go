@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	elect1 = "https://sandbox.vtpass.com/api/merchant-verify"
-	elect2 = "https://sandbox.vtpass.com/api/pay"
+	elect1 = "https://api-service.vtpass.com/api/merchant-verify"
+	elect2 = "https://api-service.vtpass.com/api/pay"
 )
 
 func ElectVerify(biller, provider, typer string) ([]byte, error) {

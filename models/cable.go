@@ -8,15 +8,15 @@ import (
 )
 
 var (
-	dstv1  = "https://sandbox.vtpass.com/api/service-variations?serviceID=dstv"
-	dstv2  = "https://sandbox.vtpass.com/api/merchant-verify"
-	dstv3  = "https://sandbox.vtpass.com/api/pay"
-	gotv1  = "https://sandbox.vtpass.com/api/service-variations?serviceID=gotv"
-	gotv2  = "https://sandbox.vtpass.com/api/merchant-verify"
-	gotv3  = "https://sandbox.vtpass.com/api/pay"
-	api    = "6106a6abec1114cc73e59c24b634d6c4"
-	public = "PK_3848b4365f111a6bd186fcf9be401c4da86d92d9a5a"
-	secret = "SK_514a719059bf25078427bd53a23499b5f2f4eab5aaf"
+	dstv1  = "https://api-service.vtpass.com/api/service-variations?serviceID=dstv"
+	dstv2  = "https://api-service.vtpass.com/api/merchant-verify"
+	dstv3  = "https://api-service.vtpass.com/api/pay"
+	gotv1  = "https://api-service.vtpass.com/api/service-variations?serviceID=gotv"
+	gotv2  = "https://api-service.vtpass.com/api/merchant-verify"
+	gotv3  = "https://api-service.vtpass.com/api/pay"
+	api    = "e7070f0974c15a7aa6fe5fc6519c5c14"
+	public = "PK_295be67ec6a18b646164ccc9f653adb18c29b5059b0"
+	secret = "SK_4410b58c82cb74f7a2ce604268583f7988041046c8c"
 )
 
 func Dstv() ([]byte, error) {

@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	smile1 = "https://sandbox.vtpass.com/api/service-variations?serviceID=smile-direct"
-	smile2 = "https://sandbox.vtpass.com/api/merchant-verify/smile/email"
-	smile3 = "https://sandbox.vtpass.com/api/pay"
+	smile1 = "https://api-service.vtpass.com/api/service-variations?serviceID=smile-direct"
+	smile2 = "https://api-service.vtpass.com/api/merchant-verify/smile/email"
+	smile3 = "https://api-service.vtpass.com/api/pay"
 )
 
 func Smile() ([]byte, error) {
