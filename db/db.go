@@ -101,6 +101,9 @@ func Conn() (*sql.DB, error) {
 
 func GetUser() ([]User, error) {
 	db, err := Conn()
+	if err != nil {
+		return nil, err
+	}
 	// Query to fetch data from the table
 	rows, err := db.Query("SELECT id, fname, lname, email, wallet FROM users")
 	if err != nil {
