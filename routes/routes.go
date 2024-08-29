@@ -63,6 +63,8 @@ func Routes() {
 	r.HandleFunc("/user/all", controller.Users).Methods("GET")
 	// r.HandleFunc("/user/pay", controller.UpdateWallet).Methods("POST")
 
+	r.HandleFunc("/admin/balance", controller.Balance).Methods("GET")
+
 	fmt.Println("running on port" + port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
