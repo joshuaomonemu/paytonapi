@@ -8,7 +8,8 @@ import (
 )
 
 var (
-	data = "https://api-service.vtpass.com/api/service-variations?serviceID="
+	data  = "https://api-service.vtpass.com/api/service-variations?serviceID="
+	data1 = "https://api-service.vtpass.com/api/pay"
 )
 
 func Data(network string) ([]byte, error) {
@@ -33,7 +34,7 @@ func Data(network string) ([]byte, error) {
 func DataPay(biller, provider, amount, phone, variation_code, request_id string) ([]byte, error) {
 
 	// Create a URL object from the base URL
-	u, err := url.Parse(dstv3)
+	u, err := url.Parse(data1)
 	if err != nil {
 		fmt.Println("Error parsing URL:", err)
 		return nil, err
