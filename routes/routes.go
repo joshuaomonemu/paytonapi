@@ -43,6 +43,10 @@ func Routes() {
 	r.HandleFunc("/cable/gotv/verify/{id}", controller.GotvVerify).Methods("POST")
 	r.HandleFunc("/cable/gotv/pay/{id}", controller.GotvPay).Methods("POST")
 
+	r.HandleFunc("/cable/star", controller.Star).Methods("GET")
+	r.HandleFunc("/cable/star/verify/{id}", controller.StarVerify).Methods("POST")
+	r.HandleFunc("/cable/star/pay/{id}", controller.StarPay).Methods("POST")
+
 	r.HandleFunc("/internet/smile", controller.Smile).Methods("GET")
 	r.HandleFunc("/internet/smile/verify/{id}", controller.SmileVerify).Methods("POST")
 	r.HandleFunc("/internet/smile/pay/{id}", controller.SmilePay).Methods("POST")

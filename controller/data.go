@@ -65,6 +65,7 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	biller := params["id"]
+
 	provider := r.Header.Get("provider")
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
