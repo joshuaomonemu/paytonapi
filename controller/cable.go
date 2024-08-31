@@ -222,3 +222,84 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(simp))
 
 }
+
+func Star(w http.ResponseWriter, r *http.Request) {
+	resp, err := models.Star()
+	if err != nil {
+		io.WriteString(w, err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	var response structs.Response
+	err = json.Unmarshal(resp, &response)
+	if err != nil {
+		fmt.Println("Error unmarshalling JSON:", err)
+		return
+	}
+
+	var variationDetails []VariationDetails
+
+	// Loop through variations and populate the new struct
+	for _, variation := range response.Content.Variations {
+		variationDetails = append(variationDetails, VariationDetails{
+			Name:            variation.Name,
+			VariationCode:   variation.VariationCode,
+			VariationAmount: variation.VariationAmount,
+		})
+	}
+
+	// Marshal the VariationDetails slice back to JSON
+	detailsJSON, err := json.Marshal(variationDetails)
+	if err != nil {
+		panic(err)
+	}
+	io.WriteString(w, string(detailsJSON))
+
+}
+
+func StarVerify(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	biller := params["id"]
+	provider := "gotv"
+	resp, err := models.StarVerify(biller, provider)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		w.WriteHeader(500)
+		return
+	}
+
+	io.WriteString(w, string(resp))
+
+}
+
+func StarPay(w http.ResponseWriter, r *http.Request) {
+
+	// Generate the full request ID
+	reqID, _ := helper.GenerateRequestID(12)
+
+	params := mux.Vars(r)
+	biller := params["id"]
+	provider := "gotv"
+	amount := r.Header.Get("amount")
+	phone := r.Header.Get("phone")
+	subscription_type := r.Header.Get("subscription_type")
+
+	resp, err := models.StarPay(biller, provider, amount, phone, subscription_type, reqID)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		w.WriteHeader(500)
+		return
+	}
+
+	var response DstvResponse
+
+	err = json.Unmarshal(resp, &response)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+	simp, _ := json.Marshal(response)
+
+	io.WriteString(w, string(simp))
+
+}
