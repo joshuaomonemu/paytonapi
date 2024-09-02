@@ -2,6 +2,7 @@ package controller
 
 import (
 	"app/helper"
+	"app/mail"
 	"app/models"
 	structs "app/struct"
 	"encoding/json"
@@ -65,11 +66,13 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	biller := params["id"]
+	note := "Data Purchase"
 
 	provider := r.Header.Get("provider")
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	variation_code := r.Header.Get("variation_code")
+	email := r.Header.Get("email")
 
 	if provider == "0" {
 		provider = "mtn-data"
@@ -86,6 +89,9 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
+	} else {
+
+		mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse

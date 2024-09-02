@@ -80,7 +80,7 @@ func AirtimeMail(email, note, number, amount string) {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text">
-                                                                                        <h2 style="font-size: 29px;">Airtime Purchase</h2>
+                                                                                        <h2 style="font-size: 29px;">` + note + `</h2>
                                                                                         <p style="font-size: 27px;">Successful</p>
                                                                                     </td>
                                                                                 </tr>
@@ -97,9 +97,9 @@ func AirtimeMail(email, note, number, amount string) {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p5t es-p5b es-p40r es-m-p0r" esd-links-underline="none">
-                                                                                        <p>Congratulations, Voke!</p>
+                                                                                        <p>Congratulations!</p>
                                                                                         <p>You've successfully topped up ` + number + ` with ₦` + amount + ` of airtime.</p>
-                                                                                        <p>Need more airtime? We've got you covered! Top up again anytime, anywhere through Payton.</p>
+                                                                                        <p>Need more airtime or data? We've got you covered! Top up again anytime, anywhere through Payton.</p>
                                                                                         <p><br></p>
                                                                                         <p><br></p>
                                                                                         <p><br></p>

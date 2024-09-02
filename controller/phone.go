@@ -22,7 +22,7 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	email := r.Header.Get("email")
-	note := "Airtime Purchase Successful"
+	note := "Airtime Purchase"
 	// email := r.Header.Get("email")
 	// date := helper.GetDate()
 	// time := helper.GetTime()
