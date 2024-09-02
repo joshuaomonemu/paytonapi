@@ -6,7 +6,7 @@ import (
 
 var body string
 
-func AirtimeMail(number, amount string) {
+func AirtimeMail(email, note, number, amount string) {
 
 	body = `<body>
     <div dir="ltr" class="es-wrapper-color">
@@ -259,8 +259,8 @@ func AirtimeMail(number, amount string) {
 
 	msg := gomail.NewMessage()
 	msg.SetHeader("From", "info@payton.jitssolutions.com")
-	msg.SetHeader("To", "joshuaomonemu@gmail.com")
-	msg.SetHeader("Subject", "Airtime Purchase Successful")
+	msg.SetHeader("To", email)
+	msg.SetHeader("Subject", note)
 	msg.SetBody("text/html", body)
 	//msg.Attach("pic.jpg")
 

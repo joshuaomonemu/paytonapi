@@ -2,6 +2,7 @@ package controller
 
 import (
 	"app/helper"
+	"app/mail"
 	"app/models"
 	"encoding/json"
 	"io"
@@ -20,6 +21,8 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 	provider := r.Header.Get("provider")
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
+	email := r.Header.Get("email")
+	note := "Airtime Purchase Successful"
 	// email := r.Header.Get("email")
 	// date := helper.GetDate()
 	// time := helper.GetTime()
@@ -45,6 +48,9 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
+	} else {
+
+		mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse
