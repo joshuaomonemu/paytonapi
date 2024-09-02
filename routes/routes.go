@@ -28,8 +28,6 @@ func Routes() {
 	//Endpoints and Route points for users
 	r.HandleFunc("/auth/token", controller.Auth).Methods("POST")
 
-	r.HandleFunc("/airtime/load", controller.Airtime).Methods("POST")
-
 	r.HandleFunc("/util/billers", controller.LoadBillers).Methods("GET")
 	r.HandleFunc("/util/bill/pay", controller.PayBill).Methods("POST")
 
