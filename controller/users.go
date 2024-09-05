@@ -14,7 +14,11 @@ func Users(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, string(err.Error()))
 		return
 	}
-	bs, _ := json.Marshal(users)
+	bs, err := json.Marshal(users)
+	if err != nil {
+		io.WriteString(w, string(err.Error()))
+		return
+	}
 
 	io.WriteString(w, string(bs))
 
