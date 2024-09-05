@@ -36,7 +36,7 @@ type TransactionPayload struct {
 func Conn() (*sql.DB, error) {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
-	dsn := "ineracsi_baker:Goodmorning11.@tcp(54.38.50.173:3306)/ineracsi_payment_app"
+	dsn := "spadesss_testuser:mylovefordogs@tcp(54.38.50.173:3306)/spadesss_test"
 	//dsn := "root:@tcp(127.0.0.1:3306)/test"
 
 	// Open a connection to the database
