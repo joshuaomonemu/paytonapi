@@ -2,6 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"errors"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -137,30 +139,33 @@ func GetUser() ([]User, error) {
 	return users, nil
 }
 
-// func CheckBalance(amount, email string) (error, string) {
-// 	db := Conn()
-// 	// Convert amount to float64
-// 	amt, err := strconv.ParseFloat(amount, 64)
-// 	if err != nil {
-// 		return err, ""
-// 	}
+func CheckBalance(amount, email string) (string, error) {
+	db, err := Conn()
+	if err != nil {
+		return "", err
+	}
+	// Convert amount to float64
+	amt, err := strconv.ParseFloat(amount, 64)
+	if err != nil {
+		return "", err
+	}
 
-// 	var wallet float64
-// 	query := "SELECT wallet FROM users WHERE email = ?"
-// 	err = db.QueryRow(query, email).Scan(&wallet)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			return errors.New("no user found with the provided email"), ""
-// 		}
-// 		return err, ""
-// 	}
+	var wallet float64
+	query := "SELECT wallet FROM users WHERE email = ?"
+	err = db.QueryRow(query, email).Scan(&wallet)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", errors.New("no user found with the provided email")
+		}
+		return "", err
+	}
 
-// 	if amt > wallet {
-// 		return errors.New("error"), ""
-// 	}
+	if amt > wallet {
+		return "", errors.New("error")
+	}
 
-// 	return nil, "okay"
-// }
+	return "okay", nil
+}
 
 // func UpdateBalance(email, amount string) error {
 // 	db := Conn()

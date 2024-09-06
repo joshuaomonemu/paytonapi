@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"app/db"
 	"app/helper"
 	"app/mail"
 	"app/models"
@@ -23,15 +24,14 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 	phone := r.Header.Get("phone")
 	email := r.Header.Get("email")
 	note := "Airtime Purchase"
-	// email := r.Header.Get("email")
 	// date := helper.GetDate()
 	// time := helper.GetTime()
 
-	// err, _ := db.CheckBalance(amount, email)
-	// if err != nil {
-	// 	w.WriteHeader(402)
-	// 	return
-	// }
+	_, err := db.CheckBalance(amount, email)
+	if err != nil {
+		w.WriteHeader(402)
+		return
+	}
 
 	if provider == "0" {
 		provider = "mtn"
