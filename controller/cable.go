@@ -45,7 +45,7 @@ type Transaction struct {
 	Quantity            int         `json:"quantity"`
 	ServiceVerification interface{} `json:"service_verification"` // Assuming this can be of any type, hence using interface{}
 	Channel             string      `json:"channel"`
-	Commission          int         `json:"commission"`
+	Commission          float64     `json:"commission"`
 	TotalAmount         float64     `json:"total_amount"`
 	Discount            interface{} `json:"discount"` // Assuming this can be of any type, hence using interface{}
 	Type                string      `json:"type"`
