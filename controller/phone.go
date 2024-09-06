@@ -6,8 +6,10 @@ import (
 	"app/mail"
 	"app/models"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 )
 
 var (
@@ -49,6 +51,16 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		return
 	} else {
+		bal, _ := db.LoadWallet(email)
+		balance := int(bal)
+		amt, _ := strconv.Atoi(amount)
+
+		new_balance := balance - amt
+		err := db.UpdateBalance(email, fmt.Sprint(new_balance))
+		if err != nil {
+			w.WriteHeader(400)
+			return
+		}
 
 		mail.AirtimeMail(email, note, phone, amount)
 	}
