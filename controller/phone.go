@@ -72,7 +72,11 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 			Status:  trans_stat,
 			User:    email,
 		}
-		db.SetTransaction(trans)
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
 		w.WriteHeader(400)
 		return
 	} else {
@@ -88,7 +92,11 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 			Status:  trans_stat,
 			User:    email,
 		}
-		db.SetTransaction(trans)
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
 	}
 
 	err = json.Unmarshal(resp, &response)
