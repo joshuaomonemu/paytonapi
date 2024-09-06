@@ -123,7 +123,7 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 			Title:   provider,
 			Date:    date,
 			Time:    time,
-			Amount:  amount,
+			Amount:  amount + "₦",
 			Status:  trans_stat,
 			User:    email,
 		}
@@ -137,13 +137,12 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 	} else {
 		trans_stat = "Approved"
 		db.WalletTrans(amount, email)
-		trans_stat = "Declined"
 		trans := &db.Transaction{
 			IconUrl: "assets/images/data.png",
 			Title:   provider,
 			Date:    date,
 			Time:    time,
-			Amount:  amount,
+			Amount:  amount + "₦",
 			Status:  trans_stat,
 			User:    email,
 		}
