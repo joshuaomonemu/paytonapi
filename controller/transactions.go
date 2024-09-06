@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"app/db"
 	"encoding/json"
 	"io"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type Transaction12 struct {
@@ -55,4 +58,16 @@ func Transactions(w http.ResponseWriter, r *http.Request) {
 
 	io.WriteString(w, string(bs))
 
+}
+
+func GetTrans(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	user := params["id"]
+	resp, err := db.GetTransactions(user)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+
+	io.WriteString(w, string(resp))
 }
