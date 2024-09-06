@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"app/db"
 	"app/helper"
 	"app/mail"
 	"app/models"
@@ -66,13 +67,15 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	biller := params["id"]
-	note := "Data Purchase"
 
 	provider := r.Header.Get("provider")
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	variation_code := r.Header.Get("variation_code")
 	email := r.Header.Get("email")
+	note := "Data Purchase"
+	date := helper.GetDate()
+	time := helper.GetTime()
 
 	if provider == "0" {
 		provider = "mtn-data"
@@ -101,6 +104,51 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		return
 	}
+
+	if response.Code != "000" {
+		trans_stat = "Declined"
+		trans := &db.Transaction{
+			IconUrl: "assets/images/data.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
+		w.WriteHeader(400)
+		return
+	} else {
+		trans_stat = "Approved"
+		db.WalletTrans(amount, email)
+		trans_stat = "Declined"
+		trans := &db.Transaction{
+			IconUrl: "assets/images/data.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
+	}
+
+	err = json.Unmarshal(resp, &response)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+
 	simp, _ := json.Marshal(response)
 
 	io.WriteString(w, string(simp))
