@@ -153,12 +153,6 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err = json.Unmarshal(resp, &response)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		return
-	}
-
 	simp, _ := json.Marshal(response)
 
 	io.WriteString(w, string(simp))

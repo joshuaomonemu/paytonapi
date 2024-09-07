@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"app/db"
 	"app/helper"
 	"app/models"
 	structs "app/struct"
@@ -8,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -118,14 +120,37 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 	provider := "dstv"
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
+	email := r.Header.Get("email")
 	variation_code := r.Header.Get("variation_code")
 	subscription_type := r.Header.Get("subscription_type")
+	//note := "Cable Subscription"
+	date := helper.GetDate()
+	time := helper.GetTime()
+
+	_, err := db.CheckBalance(amount, email)
+	if err != nil {
+		w.WriteHeader(402)
+		return
+	}
 
 	resp, err := models.DstvPay(biller, provider, amount, phone, subscription_type, variation_code, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
+	} else {
+		bal, _ := db.LoadWallet(email)
+		balance := int(bal)
+		amt, _ := strconv.Atoi(amount)
+
+		new_balance := balance - amt
+		err := db.UpdateBalance(email, fmt.Sprint(new_balance))
+		if err != nil {
+			w.WriteHeader(400)
+			return
+		}
+
+		//mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse
@@ -135,6 +160,44 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		return
 	}
+
+	if response.Code != "000" {
+		trans_stat = "Declined"
+		trans := &db.Transaction{
+			IconUrl: "assets/images/data.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  "₦" + amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
+		w.WriteHeader(400)
+		return
+	} else {
+		trans_stat = "Approved"
+		db.WalletTrans(amount, email)
+		trans := &db.Transaction{
+			IconUrl: "assets/images/data.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  "₦" + amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
+	}
+
 	simp, _ := json.Marshal(response)
 
 	io.WriteString(w, string(simp))

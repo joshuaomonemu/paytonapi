@@ -80,7 +80,7 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 			Title:   provider,
 			Date:    date,
 			Time:    time,
-			Amount:  amount + "₦",
+			Amount:  "₦" + amount,
 			Status:  trans_stat,
 			User:    email,
 		}
@@ -99,7 +99,7 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 			Title:   provider,
 			Date:    date,
 			Time:    time,
-			Amount:  amount + "₦",
+			Amount:  "₦" + amount,
 			Status:  trans_stat,
 			User:    email,
 		}
@@ -108,12 +108,6 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 			io.WriteString(w, err.Error())
 			return
 		}
-	}
-
-	err = json.Unmarshal(resp, &response)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		return
 	}
 
 	simp, _ := json.Marshal(response)
