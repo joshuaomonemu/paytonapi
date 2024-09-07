@@ -105,7 +105,6 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse
@@ -151,6 +150,8 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 			io.WriteString(w, err.Error())
 			return
 		}
+
+		mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	simp, _ := json.Marshal(response)
