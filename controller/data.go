@@ -129,10 +129,9 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 		err := db.SetTransaction(trans)
 		if err != nil {
 			io.WriteString(w, err.Error())
+			w.WriteHeader(400)
 			return
 		}
-		w.WriteHeader(400)
-		return
 	} else {
 		trans_stat = "Approved"
 		db.WalletTrans(amount, email)
