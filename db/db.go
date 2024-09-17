@@ -97,6 +97,46 @@ func GetTransactions(id string) ([]byte, error) {
 
 }
 
+func GetWalletTransactions(id string) ([]byte, error) {
+	db, err1 := Conn()
+	if err1 != nil {
+		return nil, err1
+	}
+	// Query to fetch data from the table
+	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM wallets WHERE user = ?", id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Slice to hold the results
+	var transactions []TransactionPayload
+
+	// Iterate over the rows
+	for rows.Next() {
+		var transaction TransactionPayload
+		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
+		if err != nil {
+			return nil, err
+		}
+		transactions = append(transactions, transaction)
+	}
+
+	// Check for errors from iterating over rows
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	// Print the results
+	//for _, transaction := range transactions {
+	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
+	//}
+	bs, _ := json.Marshal(transactions)
+	return bs, nil
+
+}
+
 func SetTransaction(transaction *Transaction) error {
 	db, err1 := Conn()
 	if err1 != nil {
