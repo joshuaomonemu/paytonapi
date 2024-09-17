@@ -108,6 +108,17 @@ func SetTransaction(transaction *Transaction) error {
 	return err
 }
 
+func SetWallets(transaction *Transaction) error {
+	db, err1 := Conn()
+	if err1 != nil {
+		return err1
+	}
+	query := `INSERT INTO wallets (iconurl, title, date, time, amount, status, user)
+              VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
+	return err
+}
+
 func GetUser() ([]User, error) {
 	db, err := Conn()
 	if err != nil {
