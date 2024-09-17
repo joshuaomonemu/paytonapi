@@ -40,7 +40,7 @@ func UpdateWallet(w http.ResponseWriter, r *http.Request) {
 	if stat != "000" {
 		trans_stat = "Declined"
 		trans := &db.Transaction{
-			IconUrl: "assets/images/airtime.png",
+			IconUrl: "assets/images/wallet.png",
 			Title:   "Wallet TopUp",
 			Date:    date,
 			Time:    time,
@@ -62,7 +62,7 @@ func UpdateWallet(w http.ResponseWriter, r *http.Request) {
 		}
 		trans_stat = "Approved"
 		trans := &db.Transaction{
-			IconUrl: "assets/images/airtime.png",
+			IconUrl: "assets/images/wallet.png",
 			Title:   "Wallet TopUp",
 			Date:    date,
 			Time:    time,
