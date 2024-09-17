@@ -71,3 +71,15 @@ func GetTrans(w http.ResponseWriter, r *http.Request) {
 
 	io.WriteString(w, string(resp))
 }
+
+func GetWalletTrans(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	user := params["id"]
+	resp, err := db.GetWalletTransactions(user)
+	if err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+
+	io.WriteString(w, string(resp))
+}
