@@ -55,7 +55,8 @@ func UpdateWallet(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		err := db.UpdateBalance(email, amount)
+
+		err := db.UpdateWallet(email, amount)
 		if err != nil {
 			io.WriteString(w, "error updating wallet balance")
 			w.WriteHeader(202)
@@ -74,6 +75,9 @@ func UpdateWallet(w http.ResponseWriter, r *http.Request) {
 		if err1 != nil {
 			io.WriteString(w, err1.Error())
 			return
+		} else {
+			io.WriteString(w, "wallet topup successful")
+			w.WriteHeader(200)
 		}
 	}
 }

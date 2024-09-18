@@ -253,6 +253,35 @@ func UpdateBalance(email, amount string) error {
 	return err
 }
 
+func UpdateWallet(email, amount string) error {
+	db, err1 := Conn()
+	if err1 != nil {
+		return err1
+	}
+
+	// Convert amount to float64
+	amt, err := strconv.ParseFloat(amount, 64)
+	if err != nil {
+		return err
+	}
+
+	var wallet float64
+	query := "SELECT wallet FROM users WHERE email = ?"
+	err = db.QueryRow(query, email).Scan(&wallet)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("no user found with the provided email")
+		}
+		return err
+	}
+
+	new_balance := amt + wallet
+
+	query1 := `UPDATE users SET wallet = ? WHERE email = ?`
+	_, err = db.Exec(query1, new_balance, email)
+	return err
+}
+
 func WalletTrans(amount, email string) (string, error) {
 	db, err := Conn()
 	if err != nil {
