@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -39,6 +38,25 @@ type DstvResponse struct {
 	TransactionDate     TransactionDate `json:"transaction_date"`
 	PurchasedCode       string          `json:"purchased_code"`
 }
+type UtilityResponse struct {
+	Code                string          `json:"code"`
+	Content             Content         `json:"content"`
+	ResponseDescription string          `json:"response_description"`
+	RequestID           string          `json:"requestId"`
+	Amount              string          `json:"amount"`
+	TransactionDate     TransactionDate `json:"transaction_date"`
+	PurchasedCode       string          `json:"purchased_code"`
+	ExchangeReference   string          `json:"exchangeReference"`
+	ArrearsBalance      string          `json:"arrearsBalance"`
+	AppliedToArrears    string          `json:"appliedToArrears"`
+	Wallet              string          `json:"wallet"`
+	Vat                 string          `json:"vat"`
+	InvoiceNumber       string          `json:"invoiceNumber"`
+	AppliedToWallet     string          `json:"appliedToWallet"`
+	Units               string          `json:"units"`
+	Token               string          `json:"token"`
+}
+
 type Transaction struct {
 	Status              string      `json:"status"`
 	ProductName         string      `json:"product_name"`
@@ -138,19 +156,6 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
-	} else {
-		bal, _ := db.LoadWallet(email)
-		balance := int(bal)
-		amt, _ := strconv.Atoi(amount)
-
-		new_balance := balance - amt
-		err := db.UpdateBalance(email, fmt.Sprint(new_balance))
-		if err != nil {
-			w.WriteHeader(400)
-			return
-		}
-
-		//mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse
@@ -274,19 +279,6 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
-	} else {
-		bal, _ := db.LoadWallet(email)
-		balance := int(bal)
-		amt, _ := strconv.Atoi(amount)
-
-		new_balance := balance - amt
-		err := db.UpdateBalance(email, fmt.Sprint(new_balance))
-		if err != nil {
-			w.WriteHeader(400)
-			return
-		}
-
-		//mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse
@@ -409,19 +401,6 @@ func StarPay(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
 		return
-	} else {
-		bal, _ := db.LoadWallet(email)
-		balance := int(bal)
-		amt, _ := strconv.Atoi(amount)
-
-		new_balance := balance - amt
-		err := db.UpdateBalance(email, fmt.Sprint(new_balance))
-		if err != nil {
-			w.WriteHeader(400)
-			return
-		}
-
-		//mail.AirtimeMail(email, note, phone, amount)
 	}
 
 	var response DstvResponse

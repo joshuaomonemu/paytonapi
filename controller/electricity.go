@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"app/db"
 	"app/helper"
 	"app/models"
 	"encoding/json"
@@ -66,6 +67,10 @@ func ElectPay1(w http.ResponseWriter, r *http.Request) {
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	variation_code := r.Header.Get("variation_code")
+	email := r.Header.Get("email")
+	//note := "Utility Bill"
+	date := helper.GetDate()
+	time := helper.GetTime()
 	//
 	switch provider {
 	case "1":
@@ -95,6 +100,12 @@ func ElectPay1(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+	_, err := db.CheckBalance(amount, email)
+	if err != nil {
+		w.WriteHeader(402)
+		return
+	}
+
 	resp, err := models.ElectPay1(biller, provider, amount, phone, variation_code, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
@@ -102,12 +113,50 @@ func ElectPay1(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response DstvResponse
+	var response UtilityResponse
 
 	err = json.Unmarshal(resp, &response)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		return
+	}
+
+	if response.Code != "000" {
+		trans_stat = "Declined"
+		trans := &db.Transaction{
+			IconUrl: "assets/images/electricity.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  "₦" + amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			w.WriteHeader(400)
+			return
+		}
+	} else {
+		trans_stat = "Approved"
+		db.WalletTrans(amount, email)
+		trans := &db.Transaction{
+			IconUrl: "assets/images/electricity.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  "₦" + amount,
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
+
+		//mail.AirtimeMail(email, note, phone, amount)
 	}
 	simp, _ := json.Marshal(response)
 
