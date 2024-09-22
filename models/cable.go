@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/base64"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -8,25 +9,35 @@ import (
 )
 
 var (
-	dstv1  = "https://api-service.vtpass.com/api/service-variations?serviceID=dstv"
-	dstv2  = "https://api-service.vtpass.com/api/merchant-verify"
-	dstv3  = "https://api-service.vtpass.com/api/pay"
-	gotv1  = "https://api-service.vtpass.com/api/service-variations?serviceID=gotv"
-	gotv2  = "https://api-service.vtpass.com/api/merchant-verify"
-	gotv3  = "https://api-service.vtpass.com/api/pay"
-	star1  = "https://api-service.vtpass.com/api/service-variations?serviceID=startimes"
-	star2  = "https://api-service.vtpass.com/api/merchant-verify"
-	star3  = "https://api-service.vtpass.com/api/pay"
-	api    = "e7070f0974c15a7aa6fe5fc6519c5c14"
-	public = "PK_295be67ec6a18b646164ccc9f653adb18c29b5059b0"
-	secret = "SK_4410b58c82cb74f7a2ce604268583f7988041046c8c"
+	dstv1    = "https://vtpass.com/api/service-variations?serviceID=dstv"
+	dstv2    = "https://vtpass.com/api/merchant-verify"
+	dstv3    = "https://vtpass.com/api/pay"
+	gotv1    = "https://vtpass.com/api/service-variations?serviceID=gotv"
+	gotv2    = "https://vtpass.com/api/merchant-verify"
+	gotv3    = "https://vtpass.com/api/pay"
+	star1    = "https://api-service.vtpass.com/api/service-variations?serviceID=startimes"
+	star2    = "https://api-service.vtpass.com/api/merchant-verify"
+	star3    = "https://api-service.vtpass.com/api/pay"
+	api      = "e7070f0974c15a7aa6fe5fc6519c5c14"
+	public   = "PK_295be67ec6a18b646164ccc9f653adb18c29b5059b0"
+	secret   = "SK_4410b58c82cb74f7a2ce604268583f7988041046c8c"
+	username = "paytonjit@gmail.com"
+	password = "Judithisiayei6561"
 )
 
+func Auther() string {
+	auth := username + ":" + password
+	// Base64 encode the auth string
+	encodedAuth := base64.StdEncoding.EncodeToString([]byte(auth))
+	return encodedAuth
+}
+
 func Dstv() ([]byte, error) {
+
 	req, _ := http.NewRequest("GET", dstv1, nil)
 
-	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
+	req.Header.Add("Authorization", "Basic "+Auther())
+	// req.Header.Add("Password", "Judithisiayei6561")
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -60,9 +71,10 @@ func DstvVerify(biller, provider string) ([]byte, error) {
 
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
-	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
-	req.Header.Add("secret-key", secret)
+	req.Header.Add("Authorization", "Basic "+Auther())
+	// req.Header.Add("api-key", api)
+	// req.Header.Add("public-key", public)
+	// req.Header.Add("secret-key", secret)
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -101,9 +113,10 @@ func DstvPay(biller, provider, amount, phone, subscription_type, variation_code,
 
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
-	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
-	req.Header.Add("secret-key", secret)
+	// req.Header.Add("api-key", api)
+	// req.Header.Add("public-key", public)
+	// req.Header.Add("secret-key", secret)
+	req.Header.Add("Authorization", "Basic "+Auther())
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -121,8 +134,7 @@ func DstvPay(biller, provider, amount, phone, subscription_type, variation_code,
 func Gotv() ([]byte, error) {
 	req, _ := http.NewRequest("GET", gotv1, nil)
 
-	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
+	req.Header.Add("Authorization", "Basic "+Auther())
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -156,9 +168,7 @@ func GotvVerify(biller, provider string) ([]byte, error) {
 
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
-	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
-	req.Header.Add("secret-key", secret)
+	req.Header.Add("Authorization", "Basic "+Auther())
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -195,9 +205,7 @@ func GotvPay(biller, provider, amount, phone, subscription_type, request_id stri
 
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
-	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
-	req.Header.Add("secret-key", secret)
+	req.Header.Add("Authorization", "Basic "+Auther())
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {

@@ -77,6 +77,7 @@ func GetWalletTrans(w http.ResponseWriter, r *http.Request) {
 	user := params["id"]
 	resp, err := db.GetWalletTransactions(user)
 	if err != nil {
+		w.WriteHeader(204)
 		io.WriteString(w, err.Error())
 		return
 	}

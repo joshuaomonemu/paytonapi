@@ -86,6 +86,7 @@ func Dstv(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		return
 	}
+
 	var response structs.Response
 	err = json.Unmarshal(resp, &response)
 	if err != nil {
