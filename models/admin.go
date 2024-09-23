@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	bala = "https://api-service.vtpass.com/api/balance"
+	bala = "https://vtpass.com/api/balance"
 )
 
 func Balance() ([]byte, error) {

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	phoneurl = "https://api-service.vtpass.com/api/pay"
+	phoneurl = "https://vtpass.com/api/pay"
 )
 
 func PhonePay(provider, amount, phone, request_id string) ([]byte, error) {

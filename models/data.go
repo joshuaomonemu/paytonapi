@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	data  = "https://api-service.vtpass.com/api/service-variations?serviceID="
-	data1 = "https://api-service.vtpass.com/api/pay"
+	data  = "https://vtpass.com/api/service-variations?serviceID="
+	data1 = "https://vtpass.com/api/pay"
 )
 
 func Data(network string) ([]byte, error) {
