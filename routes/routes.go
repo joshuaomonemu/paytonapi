@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -19,8 +18,8 @@ func Routes() {
 
 	// Api for User
 	//r.HandleFunc("/controller/user/get{id}", controller.GetUser).Methods("GET")
-	port := os.Getenv("PORT")
-	// port := "2020"
+	//port := os.Getenv("PORT")
+	port := "2020"
 	// if port == "" {
 	// 	port = "2020" // Set a default port for development purposes (can be removed for production)
 	// }
