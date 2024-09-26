@@ -120,6 +120,25 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(400)
 			return
 		}
+	} else if response.Code == "011" {
+		trans_stat = "Approved"
+		db.WalletTrans(amount, email)
+		trans := &db.Transaction{
+			IconUrl: "assets/images/data.png",
+			Title:   provider,
+			Date:    date,
+			Time:    time,
+			Amount:  amount + "₦",
+			Status:  trans_stat,
+			User:    email,
+		}
+		err := db.SetTransaction(trans)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			return
+		}
+
+		mail.AirtimeMail(email, note, phone, amount)
 	} else {
 		trans_stat = "Approved"
 		db.WalletTrans(amount, email)

@@ -61,7 +61,7 @@ type Transaction struct {
 	Status              string      `json:"status"`
 	ProductName         string      `json:"product_name"`
 	UniqueElement       string      `json:"unique_element"`
-	UnitPrice           int         `json:"unit_price"`
+	UnitPrice           string      `json:"unit_price"`
 	Quantity            int         `json:"quantity"`
 	ServiceVerification interface{} `json:"service_verification"` // Assuming this can be of any type, hence using interface{}
 	Channel             string      `json:"channel"`
