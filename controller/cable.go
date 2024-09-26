@@ -30,13 +30,13 @@ type TransactionDate struct {
 }
 
 type DstvResponse struct {
-	Code                string          `json:"code"`
-	Content             Content         `json:"content"`
-	ResponseDescription string          `json:"response_description"`
-	RequestID           string          `json:"requestId"`
-	Amount              string          `json:"amount"`
-	TransactionDate     TransactionDate `json:"transaction_date"`
-	PurchasedCode       string          `json:"purchased_code"`
+	Code                string  `json:"code"`
+	Content             Content `json:"content"`
+	ResponseDescription string  `json:"response_description"`
+	RequestID           string  `json:"requestId"`
+	Amount              string  `json:"amount"`
+	TransactionDate     string  `json:"transaction_date"`
+	PurchasedCode       string  `json:"purchased_code"`
 }
 type UtilityResponse struct {
 	Code                string  `json:"code"`
@@ -62,11 +62,11 @@ type Transaction struct {
 	ProductName         string      `json:"product_name"`
 	UniqueElement       string      `json:"unique_element"`
 	UnitPrice           string      `json:"unit_price"`
-	Quantity            int         `json:"quantity"`
+	Quantity            string      `json:"quantity"`
 	ServiceVerification interface{} `json:"service_verification"` // Assuming this can be of any type, hence using interface{}
 	Channel             string      `json:"channel"`
-	Commission          float64     `json:"commission"`
-	TotalAmount         float64     `json:"total_amount"`
+	Commission          string      `json:"commission"`
+	TotalAmount         string      `json:"total_amount"`
 	Discount            interface{} `json:"discount"` // Assuming this can be of any type, hence using interface{}
 	Type                string      `json:"type"`
 	Email               string      `json:"email"`
