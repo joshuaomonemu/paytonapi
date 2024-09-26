@@ -86,6 +86,7 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 	} else if provider == "3" {
 		provider = "glo-data"
 	}
+	io.WriteString(w, biller+provider+amount+phone+variation_code+reqID)
 
 	resp, err := models.DataPay(biller, provider, amount, phone, variation_code, reqID)
 	if err != nil {
