@@ -182,7 +182,7 @@ func GotvVerify(biller, provider string) ([]byte, error) {
 	return body, nil
 }
 
-func GotvPay(biller, provider, amount, phone, subscription_type, request_id string) ([]byte, error) {
+func GotvPay(biller, provider, amount, phone, subscription_type, variation_code, quantity, request_id string) ([]byte, error) {
 
 	// Create a URL object from the base URL
 	u, err := url.Parse(gotv3)
@@ -198,6 +198,8 @@ func GotvPay(biller, provider, amount, phone, subscription_type, request_id stri
 	params.Add("amount", amount)
 	params.Add("phone", phone)
 	params.Add("subscription_type", subscription_type)
+	params.Add("variation_code", variation_code)
+	params.Add("quantity", quantity)
 	params.Add("request_id", request_id)
 
 	// Add the query parameters to the URL

@@ -33,7 +33,6 @@ func PhonePay(provider, amount, phone, request_id string) ([]byte, error) {
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
 	req.Header.Add("api-key", api)
-	req.Header.Add("public-key", public)
 	req.Header.Add("secret-key", secret)
 
 	res, err := http.DefaultClient.Do(req)

@@ -141,6 +141,7 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 	phone := r.Header.Get("phone")
 	email := r.Header.Get("email")
 	variation_code := r.Header.Get("variation_code")
+	quantity := r.Header.Get("quantity")
 	subscription_type := r.Header.Get("subscription_type")
 	//note := "Cable Subscription"
 	date := helper.GetDate()
@@ -152,7 +153,7 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := models.DstvPay(biller, provider, amount, phone, subscription_type, variation_code, reqID)
+	resp, err := models.DstvPay(biller, provider, amount, phone, subscription_type, variation_code, quantity, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)
@@ -271,11 +272,13 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	email := r.Header.Get("email")
+	quantity := r.Header.Get("quantity")
+	variation_code := r.Header.Get("variation_code")
 	subscription_type := r.Header.Get("subscription_type")
 	date := helper.GetDate()
 	time := helper.GetTime()
 
-	resp, err := models.GotvPay(biller, provider, amount, phone, subscription_type, reqID)
+	resp, err := models.GotvPay(biller, provider, amount, phone, variation_code, subscription_type, quantity, reqID)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		w.WriteHeader(500)

@@ -76,8 +76,8 @@ func PhonePay(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		trans_stat = "Approved"
 		db.WalletTrans(amount, email)
+		trans_stat = "Approved"
 		trans := &db.Transaction{
 			IconUrl: "assets/images/airtime.png",
 			Title:   provider,
