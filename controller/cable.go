@@ -80,19 +80,13 @@ type Transaction struct {
 }
 
 type AirtimeResponse struct {
-	Code                string      `json:"code"`
-	ResponseDescription string      `json:"response_description"`
-	RequestID           string      `json:"requestId"`
-	TransactionID       string      `json:"transactionId"`
-	Amount              string      `json:"amount"`
-	TransactionDate     AirtimeDate `json:"transaction_date"`
-	PurchasedCode       string      `json:"purchased_code"`
-}
-
-type AirtimeDate struct {
-	Date         string `json:"date"`
-	TimezoneType int    `json:"timezone_type"`
-	Timezone     string `json:"timezone"`
+	Code                string          `json:"code"`
+	ResponseDescription string          `json:"response_description"`
+	RequestID           string          `json:"requestId"`
+	TransactionID       string          `json:"transactionId"`
+	Amount              string          `json:"amount"`
+	TransactionDate     TransactionDate `json:"transaction_date"`
+	PurchasedCode       string          `json:"purchased_code"`
 }
 
 func Dstv(w http.ResponseWriter, r *http.Request) {
