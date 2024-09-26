@@ -39,22 +39,22 @@ type DstvResponse struct {
 	PurchasedCode       string          `json:"purchased_code"`
 }
 type UtilityResponse struct {
-	Code                string          `json:"code"`
-	Content             Content         `json:"content"`
-	ResponseDescription string          `json:"response_description"`
-	RequestID           string          `json:"requestId"`
-	Amount              string          `json:"amount"`
-	TransactionDate     TransactionDate `json:"transaction_date"`
-	PurchasedCode       string          `json:"purchased_code"`
-	ExchangeReference   string          `json:"exchangeReference"`
-	ArrearsBalance      string          `json:"arrearsBalance"`
-	AppliedToArrears    string          `json:"appliedToArrears"`
-	Wallet              string          `json:"wallet"`
-	Vat                 string          `json:"vat"`
-	InvoiceNumber       string          `json:"invoiceNumber"`
-	AppliedToWallet     string          `json:"appliedToWallet"`
-	Units               string          `json:"units"`
-	Token               string          `json:"token"`
+	Code                string  `json:"code"`
+	Content             Content `json:"content"`
+	ResponseDescription string  `json:"response_description"`
+	RequestID           string  `json:"requestId"`
+	Amount              string  `json:"amount"`
+	TransactionDate     string  `json:"transaction_date"`
+	PurchasedCode       string  `json:"purchased_code"`
+	ExchangeReference   string  `json:"exchangeReference"`
+	ArrearsBalance      string  `json:"arrearsBalance"`
+	AppliedToArrears    string  `json:"appliedToArrears"`
+	Wallet              string  `json:"wallet"`
+	Vat                 string  `json:"vat"`
+	InvoiceNumber       string  `json:"invoiceNumber"`
+	AppliedToWallet     string  `json:"appliedToWallet"`
+	Units               string  `json:"units"`
+	Token               string  `json:"token"`
 }
 
 type Transaction struct {
