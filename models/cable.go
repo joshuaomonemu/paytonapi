@@ -89,7 +89,7 @@ func DstvVerify(biller, provider string) ([]byte, error) {
 	return body, nil
 }
 
-func DstvPay(biller, provider, amount, phone, subscription_type, variation_code, request_id string) ([]byte, error) {
+func DstvPay(biller, provider, amount, phone, subscription_type, variation_code, quantity, request_id string) ([]byte, error) {
 
 	// Create a URL object from the base URL
 	u, err := url.Parse(dstv3)
@@ -106,6 +106,7 @@ func DstvPay(biller, provider, amount, phone, subscription_type, variation_code,
 	params.Add("phone", phone)
 	params.Add("variation_code", variation_code)
 	params.Add("subscription_type", subscription_type)
+	params.Add("quantity", quantity)
 	params.Add("request_id", request_id)
 
 	// Add the query parameters to the URL
