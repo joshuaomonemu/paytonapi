@@ -3,6 +3,7 @@ package controller
 import (
 	"app/db"
 	"app/helper"
+	"app/mail"
 	"app/models"
 	structs "app/struct"
 	"encoding/json"
@@ -19,12 +20,41 @@ type VariationDetails struct {
 	VariationAmount string `json:"variation_amount"`
 }
 
+// Cable Struct Start
+type DstvResponse struct {
+	Code                string          `json:"code"`
+	Content             Content         `json:"content"`
+	ResponseDescription string          `json:"response_description"`
+	RequestID           string          `json:"requestId"`
+	Amount              string          `json:"amount"`
+	TransactionDate     TransactionDate `json:"transaction_date"`
+	PurchasedCode       string          `json:"purchased_code"`
+}
 type Content struct {
 	Transactions Transaction `json:"transactions"`
 }
 
-type Content1 struct {
-	Transactions Transaction1 `json:"transactions"`
+type Transaction struct {
+	Status         string  `json:"status"`
+	Channel        string  `json:"channel"`
+	TransactionID  string  `json:"transactionId"`
+	Method         string  `json:"method"`
+	Platform       string  `json:"platform"`
+	IsAPI          int     `json:"is_api"`
+	Discount       *string `json:"discount"` // Nullable field
+	CustomerID     int     `json:"customer_id"`
+	Email          string  `json:"email"`
+	Phone          string  `json:"phone"`
+	Type           string  `json:"type"`
+	ConvenienceFee string  `json:"convinience_fee"`
+	Commission     float64 `json:"commission"`
+	Amount         string  `json:"amount"`
+	TotalAmount    float64 `json:"total_amount"`
+	Quantity       int     `json:"quantity"`
+	UnitPrice      string  `json:"unit_price"`
+	UpdatedAt      string  `json:"updated_at"`
+	CreatedAt      string  `json:"created_at"`
+	ID             int     `json:"id"`
 }
 
 type TransactionDate struct {
@@ -33,24 +63,48 @@ type TransactionDate struct {
 	Timezone     string `json:"timezone"`
 }
 
-type DstvResponse struct {
-	Code                string  `json:"code"`
-	Content             Content `json:"content"`
-	ResponseDescription string  `json:"response_description"`
-	RequestID           string  `json:"requestId"`
-	Amount              string  `json:"amount"`
-	TransactionDate     string  `json:"transaction_date"`
-	PurchasedCode       string  `json:"purchased_code"`
-}
+//Cable Struct End
+
+// Data Struct Start
 type DataResponse struct {
-	Code                string   `json:"code"`
-	Content             Content1 `json:"content"`
-	ResponseDescription string   `json:"response_description"`
-	RequestID           string   `json:"requestId"`
-	Amount              string   `json:"amount"`
-	TransactionDate     string   `json:"transaction_date"`
-	PurchasedCode       string   `json:"purchased_code"`
+	Code                string          `json:"code"`
+	Content             DataContent     `json:"content"`
+	ResponseDescription string          `json:"response_description"`
+	RequestID           string          `json:"requestId"`
+	Amount              string          `json:"amount"`
+	TransactionDate     TransactionDate `json:"transaction_date"`
+	PurchasedCode       string          `json:"purchased_code"`
 }
+
+type DataContent struct {
+	Transactions DataTransaction `json:"transactions"`
+}
+
+type DataTransaction struct {
+	Status              string  `json:"status"`
+	ProductName         string  `json:"product_name"`
+	UniqueElement       string  `json:"unique_element"`
+	UnitPrice           int     `json:"unit_price"`
+	Quantity            int     `json:"quantity"`
+	ServiceVerification *string `json:"service_verification"` // Nullable field
+	Channel             string  `json:"channel"`
+	Commission          int     `json:"commission"`
+	TotalAmount         int     `json:"total_amount"`
+	Discount            *string `json:"discount"` // Nullable field
+	Type                string  `json:"type"`
+	Email               string  `json:"email"`
+	Phone               string  `json:"phone"`
+	Name                *string `json:"name"` // Nullable field
+	ConvenienceFee      int     `json:"convinience_fee"`
+	Amount              int     `json:"amount"`
+	Platform            string  `json:"platform"`
+	Method              string  `json:"method"`
+	TransactionID       string  `json:"transactionId"`
+}
+
+//Data Struct End
+
+// Utility Struct Start
 type UtilityResponse struct {
 	Code                string  `json:"code"`
 	Content             Content `json:"content"`
@@ -70,58 +124,17 @@ type UtilityResponse struct {
 	Token               string  `json:"token"`
 }
 
-type Transaction struct {
-	Status              string      `json:"status"`
-	ProductName         string      `json:"product_name"`
-	UniqueElement       string      `json:"unique_element"`
-	UnitPrice           string      `json:"unit_price"`
-	Quantity            float64     `json:"quantity"`
-	ServiceVerification interface{} `json:"service_verification"` // Assuming this can be of any type, hence using interface{}
-	Channel             string      `json:"channel"`
-	Commission          float64     `json:"commission"`
-	TotalAmount         float64     `json:"total_amount"`
-	Discount            interface{} `json:"discount"` // Assuming this can be of any type, hence using interface{}
-	Type                string      `json:"type"`
-	Email               string      `json:"email"`
-	Phone               string      `json:"phone"`
-	Name                interface{} `json:"name"` // Assuming this can be of any type, hence using interface{}
-	ConvenienceFee      float64     `json:"convinience_fee"`
-	Amount              string      `json:"amount"`
-	Platform            string      `json:"platform"`
-	Method              string      `json:"method"`
-	TransactionID       string      `json:"transactionId"`
-}
+//Utility Struct End
 
-type Transaction1 struct {
-	Status              string      `json:"status"`
-	ProductName         string      `json:"product_name"`
-	UniqueElement       string      `json:"unique_element"`
-	UnitPrice           string      `json:"unit_price"`
-	Quantity            float64     `json:"quantity"`
-	ServiceVerification interface{} `json:"service_verification"` // Assuming this can be of any type, hence using interface{}
-	Channel             string      `json:"channel"`
-	Commission          float64     `json:"commission"`
-	TotalAmount         float64     `json:"total_amount"`
-	Discount            interface{} `json:"discount"` // Assuming this can be of any type, hence using interface{}
-	Type                string      `json:"type"`
-	Email               string      `json:"email"`
-	Phone               string      `json:"phone"`
-	Name                interface{} `json:"name"` // Assuming this can be of any type, hence using interface{}
-	ConvenienceFee      float64     `json:"convinience_fee"`
-	Amount              string      `json:"amount"`
-	Platform            string      `json:"platform"`
-	Method              string      `json:"method"`
-	TransactionID       string      `json:"transactionId"`
-}
-
+// Airtime Struct Start
 type AirtimeResponse struct {
-	Code                string `json:"code"`
-	ResponseDescription string `json:"response_description"`
-	RequestID           string `json:"requestId"`
-	TransactionID       string `json:"transactionId"`
-	Amount              string `json:"amount"`
-	TransactionDate     string `json:"transaction_date"`
-	PurchasedCode       string `json:"purchased_code"`
+	Code                string      `json:"code"`
+	ResponseDescription string      `json:"response_description"`
+	RequestID           string      `json:"requestId"`
+	TransactionID       string      `json:"transactionId"`
+	Amount              string      `json:"amount"`
+	TransactionDate     AirtimeDate `json:"transaction_date"`
+	PurchasedCode       string      `json:"purchased_code"`
 }
 
 type AirtimeDate struct {
@@ -130,8 +143,11 @@ type AirtimeDate struct {
 	Timezone     string `json:"timezone"`
 }
 
+//Airtime struct end
+
 var (
 	resp1 []byte
+	resp  []byte
 )
 
 func Dstv(w http.ResponseWriter, r *http.Request) {
@@ -198,7 +214,7 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 	variation_code := r.Header.Get("variation_code")
 	quantity := r.Header.Get("quantity")
 	subscription_type := r.Header.Get("subscription_type")
-	//note := "Cable Subscription"
+	note := "DsTv Subscription"
 	date := helper.GetDate()
 	time := helper.GetTime()
 
@@ -208,11 +224,25 @@ func DstvPay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := models.DstvPay(biller, provider, amount, phone, subscription_type, variation_code, quantity, reqID)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		w.WriteHeader(500)
-		return
+	if subscription_type == "renew" {
+		var err error
+		resp1, err = models.DstvPay(biller, provider, amount, phone, subscription_type, reqID)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			w.WriteHeader(500)
+			return
+		}
+		mail.CableMail(email, note, subscription_type, variation_code, amount)
+
+	} else {
+		var err error
+		resp1, err = models.DstvPay1(biller, provider, amount, phone, variation_code, subscription_type, quantity, reqID)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			w.WriteHeader(500)
+			return
+		}
+		mail.CableMail(email, note, subscription_type, variation_code, amount)
 	}
 
 	var response DstvResponse
@@ -327,6 +357,7 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 	amount := r.Header.Get("amount")
 	phone := r.Header.Get("phone")
 	email := r.Header.Get("email")
+	note := "GOTV Subscription"
 	quantity := r.Header.Get("quantity")
 	variation_code := r.Header.Get("variation_code")
 	subscription_type := r.Header.Get("subscription_type")
@@ -341,6 +372,7 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(500)
 			return
 		}
+		mail.CableMail(email, note, subscription_type, variation_code, amount)
 
 	} else {
 		var err error
@@ -350,6 +382,7 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(500)
 			return
 		}
+		mail.CableMail(email, note, subscription_type, variation_code, amount)
 	}
 
 	var response DstvResponse
