@@ -194,21 +194,23 @@ func GotvPay(biller, provider, amount, phone, subscription_type, variation_code,
 
 	// Create query parameters
 	params := url.Values{}
-	params.Add("billersCode", biller)
+	params.Add("request_id", request_id)
 	params.Add("serviceID", provider)
+	params.Add("billersCode", biller)
 	params.Add("amount", amount)
 	params.Add("phone", phone)
 	params.Add("subscription_type", subscription_type)
-	params.Add("variation_code", variation_code)
-	params.Add("quantity", quantity)
-	params.Add("request_id", request_id)
 
 	// Add the query parameters to the URL
 	u.RawQuery = params.Encode()
 
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
-	req.Header.Add("Authorization", "Basic "+Auther())
+	req.Header.Add("api-key", api)
+	req.Header.Add("public-key", public)
+	req.Header.Add("secret-key", secret)
+
+	//req.Header.Add("Authorization", "Basic "+Auther())
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
