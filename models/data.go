@@ -42,12 +42,12 @@ func DataPay(biller, provider, amount, phone, variation_code, request_id string)
 
 	// Create query parameters
 	params := url.Values{}
-	params.Add("billersCode", biller)
+	params.Add("request_id", request_id)
 	params.Add("serviceID", provider)
+	params.Add("billersCode", biller)
+	params.Add("variation_code", variation_code)
 	params.Add("amount", amount)
 	params.Add("phone", phone)
-	params.Add("variation_code", variation_code)
-	params.Add("request_id", request_id)
 
 	// Add the query parameters to the URL
 	u.RawQuery = params.Encode()

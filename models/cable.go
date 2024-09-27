@@ -183,7 +183,7 @@ func GotvVerify(biller, provider string) ([]byte, error) {
 	return body, nil
 }
 
-func GotvPay(biller, provider, amount, phone, subscription_type, variation_code, quantity, request_id string) ([]byte, error) {
+func GotvPay(biller, provider, amount, phone, subscription_type, request_id string) ([]byte, error) {
 
 	// Create a URL object from the base URL
 	u, err := url.Parse(gotv3)
@@ -197,6 +197,49 @@ func GotvPay(biller, provider, amount, phone, subscription_type, variation_code,
 	params.Add("request_id", request_id)
 	params.Add("serviceID", provider)
 	params.Add("billersCode", biller)
+	params.Add("amount", amount)
+	params.Add("phone", phone)
+	params.Add("subscription_type", subscription_type)
+
+	// Add the query parameters to the URL
+	u.RawQuery = params.Encode()
+
+	req, _ := http.NewRequest("POST", u.String(), nil)
+
+	req.Header.Add("api-key", api)
+	req.Header.Add("public-key", public)
+	req.Header.Add("secret-key", secret)
+
+	//req.Header.Add("Authorization", "Basic "+Auther())
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	return body, nil
+}
+
+func GotvPay1(biller, provider, amount, phone, subscription_type, variation_code, quantity, request_id string) ([]byte, error) {
+
+	// Create a URL object from the base URL
+	u, err := url.Parse(gotv3)
+	if err != nil {
+		fmt.Println("Error parsing URL:", err)
+		return nil, err
+	}
+
+	// Create query parameters
+	params := url.Values{}
+	params.Add("request_id", request_id)
+	params.Add("serviceID", provider)
+	params.Add("billersCode", biller)
+	params.Add("variation_code", variation_code)
 	params.Add("amount", amount)
 	params.Add("phone", phone)
 	params.Add("subscription_type", subscription_type)

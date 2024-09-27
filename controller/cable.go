@@ -23,6 +23,10 @@ type Content struct {
 	Transactions Transaction `json:"transactions"`
 }
 
+type Content1 struct {
+	Transactions Transaction1 `json:"transactions"`
+}
+
 type TransactionDate struct {
 	Date         string `json:"date"`
 	TimezoneType int    `json:"timezone_type"`
@@ -37,6 +41,15 @@ type DstvResponse struct {
 	Amount              string  `json:"amount"`
 	TransactionDate     string  `json:"transaction_date"`
 	PurchasedCode       string  `json:"purchased_code"`
+}
+type DataResponse struct {
+	Code                string   `json:"code"`
+	Content             Content1 `json:"content"`
+	ResponseDescription string   `json:"response_description"`
+	RequestID           string   `json:"requestId"`
+	Amount              string   `json:"amount"`
+	TransactionDate     string   `json:"transaction_date"`
+	PurchasedCode       string   `json:"purchased_code"`
 }
 type UtilityResponse struct {
 	Code                string  `json:"code"`
@@ -79,6 +92,28 @@ type Transaction struct {
 	TransactionID       string      `json:"transactionId"`
 }
 
+type Transaction1 struct {
+	Status              string      `json:"status"`
+	ProductName         string      `json:"product_name"`
+	UniqueElement       string      `json:"unique_element"`
+	UnitPrice           string      `json:"unit_price"`
+	Quantity            int64       `json:"quantity"`
+	ServiceVerification interface{} `json:"service_verification"` // Assuming this can be of any type, hence using interface{}
+	Channel             string      `json:"channel"`
+	Commission          string      `json:"commission"`
+	TotalAmount         string      `json:"total_amount"`
+	Discount            interface{} `json:"discount"` // Assuming this can be of any type, hence using interface{}
+	Type                string      `json:"type"`
+	Email               string      `json:"email"`
+	Phone               string      `json:"phone"`
+	Name                interface{} `json:"name"` // Assuming this can be of any type, hence using interface{}
+	ConvenienceFee      string      `json:"convinience_fee"`
+	Amount              string      `json:"amount"`
+	Platform            string      `json:"platform"`
+	Method              string      `json:"method"`
+	TransactionID       string      `json:"transactionId"`
+}
+
 type AirtimeResponse struct {
 	Code                string `json:"code"`
 	ResponseDescription string `json:"response_description"`
@@ -94,6 +129,10 @@ type AirtimeDate struct {
 	TimezoneType int    `json:"timezone_type"`
 	Timezone     string `json:"timezone"`
 }
+
+var (
+	resp1 []byte
+)
 
 func Dstv(w http.ResponseWriter, r *http.Request) {
 	resp, err := models.Dstv()
@@ -294,21 +333,33 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 	date := helper.GetDate()
 	time := helper.GetTime()
 
-	resp, err := models.GotvPay(biller, provider, amount, phone, variation_code, subscription_type, quantity, reqID)
-	if err != nil {
-		io.WriteString(w, err.Error())
-		w.WriteHeader(500)
-		return
+	if subscription_type == "renew" {
+		var err error
+		resp1, err = models.GotvPay(biller, provider, amount, phone, subscription_type, reqID)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			w.WriteHeader(500)
+			return
+		}
+
+	} else {
+		var err error
+		resp1, err = models.GotvPay1(biller, provider, amount, phone, variation_code, subscription_type, quantity, reqID)
+		if err != nil {
+			io.WriteString(w, err.Error())
+			w.WriteHeader(500)
+			return
+		}
 	}
 
 	var response DstvResponse
 
-	err = json.Unmarshal(resp, &response)
+	err := json.Unmarshal(resp1, &response)
 	if err != nil {
 		io.WriteString(w, err.Error())
 		return
 	} else {
-		io.WriteString(w, string(resp))
+		io.WriteString(w, string(resp1))
 	}
 
 	if response.Code != "000" {
