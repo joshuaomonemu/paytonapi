@@ -95,7 +95,7 @@ func DataPay(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var response DstvResponse
+	var response DataResponse
 
 	err = json.Unmarshal(resp, &response)
 	if err != nil {
