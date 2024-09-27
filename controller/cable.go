@@ -307,6 +307,8 @@ func GotvPay(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		io.WriteString(w, err.Error())
 		return
+	} else {
+		io.WriteString(w, string(resp))
 	}
 
 	if response.Code != "000" {
