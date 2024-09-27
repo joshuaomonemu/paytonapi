@@ -95,7 +95,7 @@ func GetTransactions(id string) ([]byte, error) {
 	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
 	//}
 	bs, _ := json.Marshal(transactions)
-	db.Close()
+
 	return bs, nil
 
 }
@@ -136,7 +136,7 @@ func GetWalletTransactions(id string) ([]byte, error) {
 	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
 	//}
 	bs, _ := json.Marshal(transactions)
-	db.Close()
+
 	return bs, nil
 
 }
@@ -149,7 +149,7 @@ func SetTransaction(transaction *Transaction) error {
 	query := `INSERT INTO transactions (iconurl, title, date, time, amount, status, user)
               VALUES (?, ?, ?, ?, ?, ?, ?)`
 	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
-	db.Close()
+
 	return err
 }
 
@@ -161,7 +161,7 @@ func SetWallets(transaction *Transaction) error {
 	query := `INSERT INTO wallets (iconurl, title, date, time, amount, status, user)
               VALUES (?, ?, ?, ?, ?, ?, ?)`
 	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
-	db.Close()
+
 	return err
 }
 
@@ -200,7 +200,7 @@ func GetUser() ([]User, error) {
 	// for _, user := range users {
 	// 	fmt.Printf("ID: %d, FName: %s, LName: %s, Email: %s\n", user.ID, user.FName, user.LName, user.Email)
 	// }
-	db.Close()
+
 	return users, nil
 }
 
@@ -229,7 +229,6 @@ func CheckBalance(amount, email string) (string, error) {
 		return "", errors.New("error")
 	}
 
-	db.Close()
 	return "okay", nil
 }
 
@@ -248,7 +247,7 @@ func LoadWallet(email string) (float64, error) {
 		}
 		return 0, err
 	}
-	db.Close()
+
 	return wallet, nil
 }
 
@@ -259,7 +258,7 @@ func UpdateBalance(email, amount string) error {
 	}
 	query := `UPDATE users SET wallet = ? WHERE email = ?`
 	_, err := db.Exec(query, amount, email)
-	db.Close()
+
 	return err
 }
 
@@ -289,7 +288,7 @@ func UpdateWallet(email, amount string) error {
 
 	query1 := `UPDATE users SET wallet = ? WHERE email = ?`
 	_, err = db.Exec(query1, new_balance, email)
-	db.Close()
+
 	return err
 }
 
@@ -320,6 +319,6 @@ func WalletTrans(amount, email string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	db.Close()
+
 	return "okay", nil
 }
