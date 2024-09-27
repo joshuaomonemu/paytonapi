@@ -108,7 +108,7 @@ type Transaction1 struct {
 	Phone               string      `json:"phone"`
 	Name                interface{} `json:"name"` // Assuming this can be of any type, hence using interface{}
 	ConvenienceFee      float64     `json:"convinience_fee"`
-	Amount              float64     `json:"amount"`
+	Amount              string      `json:"amount"`
 	Platform            string      `json:"platform"`
 	Method              string      `json:"method"`
 	TransactionID       string      `json:"transactionId"`
