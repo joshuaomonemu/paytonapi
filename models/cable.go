@@ -175,7 +175,9 @@ func DstvPay1(biller, provider, amount, phone, subscription_type, variation_code
 func Gotv() ([]byte, error) {
 	req, _ := http.NewRequest("GET", gotv1, nil)
 
-	req.Header.Add("Authorization", "Basic "+Auther())
+	req.Header.Add("api-key", api)
+	req.Header.Add("public-key", public)
+	req.Header.Add("secret-key", secret)
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -209,7 +211,9 @@ func GotvVerify(biller, provider string) ([]byte, error) {
 
 	req, _ := http.NewRequest("POST", u.String(), nil)
 
-	req.Header.Add("Authorization", "Basic "+Auther())
+	req.Header.Add("api-key", api)
+	req.Header.Add("public-key", public)
+	req.Header.Add("secret-key", secret)
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
