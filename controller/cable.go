@@ -22,13 +22,13 @@ type VariationDetails struct {
 
 // Cable Struct Start
 type DstvResponse struct {
-	Code                string          `json:"code"`
-	Content             Content         `json:"content"`
-	ResponseDescription string          `json:"response_description"`
-	RequestID           string          `json:"requestId"`
-	Amount              string          `json:"amount"`
-	TransactionDate     TransactionDate `json:"transaction_date"`
-	PurchasedCode       string          `json:"purchased_code"`
+	Code                string  `json:"code"`
+	Content             Content `json:"content"`
+	ResponseDescription string  `json:"response_description"`
+	RequestID           string  `json:"requestId"`
+	Amount              string  `json:"amount"`
+	TransactionDate     string  `json:"transaction_date"`
+	PurchasedCode       string  `json:"purchased_code"`
 }
 type Content struct {
 	Transactions Transaction `json:"transactions"`
