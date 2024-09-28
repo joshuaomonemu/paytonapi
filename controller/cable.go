@@ -67,13 +67,13 @@ type TransactionDate struct {
 
 // Data Struct Start
 type DataResponse struct {
-	Code                string          `json:"code"`
-	Content             DataContent     `json:"content"`
-	ResponseDescription string          `json:"response_description"`
-	RequestID           string          `json:"requestId"`
-	Amount              string          `json:"amount"`
-	TransactionDate     TransactionDate `json:"transaction_date"`
-	PurchasedCode       string          `json:"purchased_code"`
+	Code                string      `json:"code"`
+	Content             DataContent `json:"content"`
+	ResponseDescription string      `json:"response_description"`
+	RequestID           string      `json:"requestId"`
+	Amount              string      `json:"amount"`
+	TransactionDate     string      `json:"transaction_date"`
+	PurchasedCode       string      `json:"purchased_code"`
 }
 
 type DataContent struct {
@@ -84,19 +84,19 @@ type DataTransaction struct {
 	Status              string  `json:"status"`
 	ProductName         string  `json:"product_name"`
 	UniqueElement       string  `json:"unique_element"`
-	UnitPrice           int     `json:"unit_price"`
+	UnitPrice           string  `json:"unit_price"`
 	Quantity            int     `json:"quantity"`
 	ServiceVerification *string `json:"service_verification"` // Nullable field
 	Channel             string  `json:"channel"`
-	Commission          int     `json:"commission"`
-	TotalAmount         int     `json:"total_amount"`
+	Commission          float64 `json:"commission"`
+	TotalAmount         float64 `json:"total_amount"`
 	Discount            *string `json:"discount"` // Nullable field
 	Type                string  `json:"type"`
 	Email               string  `json:"email"`
 	Phone               string  `json:"phone"`
 	Name                *string `json:"name"` // Nullable field
 	ConvenienceFee      int     `json:"convinience_fee"`
-	Amount              int     `json:"amount"`
+	Amount              string  `json:"amount"`
 	Platform            string  `json:"platform"`
 	Method              string  `json:"method"`
 	TransactionID       string  `json:"transactionId"`
@@ -128,13 +128,13 @@ type UtilityResponse struct {
 
 // Airtime Struct Start
 type AirtimeResponse struct {
-	Code                string      `json:"code"`
-	ResponseDescription string      `json:"response_description"`
-	RequestID           string      `json:"requestId"`
-	TransactionID       string      `json:"transactionId"`
-	Amount              string      `json:"amount"`
-	TransactionDate     AirtimeDate `json:"transaction_date"`
-	PurchasedCode       string      `json:"purchased_code"`
+	Code                string `json:"code"`
+	ResponseDescription string `json:"response_description"`
+	RequestID           string `json:"requestId"`
+	TransactionID       string `json:"transactionId"`
+	Amount              string `json:"amount"`
+	TransactionDate     string `json:"transaction_date"`
+	PurchasedCode       string `json:"purchased_code"`
 }
 
 type AirtimeDate struct {
