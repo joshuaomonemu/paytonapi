@@ -53,6 +53,7 @@ func Routes() {
 	// r.HandleFunc("/db/trans", controller.GetTrans).Methods("GET")
 
 	r.HandleFunc("/user/transactions", controller.Transactions).Methods("GET")
+	r.HandleFunc("/user/transactions/approve/{id}", controller.TransApprove).Methods("GET")
 	r.HandleFunc("/user/transactions/{id}", controller.GetTrans).Methods("GET")
 	r.HandleFunc("/user/wallet/topup/{id}", controller.UpdateWallet).Methods("POST")
 	r.HandleFunc("/user/wallet/transactions/{id}", controller.GetWalletTrans).Methods("GET")
