@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"app/auth"
 	"app/controller"
 	"fmt"
 	"log"
@@ -14,15 +15,8 @@ var r = mux.NewRouter()
 
 func Routes() {
 	//Starting Server and running on port 2020
-	//port = os.Getenv("PORT") // Get the port from the environment
 
-	// Api for User
-	//r.HandleFunc("/controller/user/get{id}", controller.GetUser).Methods("GET")
-	//port := os.Getenv("PORT")
 	port := "2020"
-	// if port == "" {
-	// 	port = "2020" // Set a default port for development purposes (can be removed for production)
-	// }
 
 	//Endpoints and Route points for users
 	r.HandleFunc("/auth/token", controller.Auth).Methods("POST")
@@ -64,6 +58,7 @@ func Routes() {
 	r.HandleFunc("/user/wallet/transactions/{id}", controller.GetWalletTrans).Methods("GET")
 
 	r.HandleFunc("/user/all", controller.Users).Methods("GET")
+	r.HandleFunc("/auth/user/signup", auth.RegisterUser).Methods("POST")
 	// r.HandleFunc("/user/pay", controller.UpdateWallet).Methods("POST")
 
 	r.HandleFunc("/admin/balance", controller.Balance).Methods("GET")

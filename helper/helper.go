@@ -2,6 +2,8 @@ package helper
 
 import (
 	"crypto/rand"
+	"fmt"
+	"strings"
 	"time"
 )
 
@@ -62,4 +64,18 @@ func GetTime() string {
 
 	// Print the formatted time
 	return formattedTime
+}
+
+// Utility function to format and escape special characters
+func FormatAndEscape(format string, args ...interface{}) string {
+	// Format the string with given arguments
+	formattedString := fmt.Sprintf(format, args...)
+
+	// Escape special characters, e.g., quotes
+	escapedString := strings.ReplaceAll(formattedString, `"`, `\"`)
+
+	// You can escape more characters as needed
+	// escapedString = strings.ReplaceAll(escapedString, `'`, `\'`)  // For single quotes
+
+	return escapedString
 }

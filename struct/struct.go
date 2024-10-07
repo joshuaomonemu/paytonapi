@@ -134,3 +134,11 @@ type Variation struct {
 	VariationAmount string `json:"variation_amount"`
 	FixedPrice      string `json:"fixedPrice"`
 }
+
+type UserData struct {
+	Fname    string `json:"fname"`
+	Lname    string `json:"lname"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Phone    string `json:"phone"`
+}

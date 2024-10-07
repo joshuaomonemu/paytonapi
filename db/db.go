@@ -40,7 +40,7 @@ type TransactionPayload struct {
 func Conn() (*sql.DB, error) {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
-	dsn := "spades:mylovefordogs@tcp(payton.c1ws4goq8w6a.eu-north-1.rds.amazonaws.com:3306)/ineracsi_payment_app"
+	dsn := "root:mypassword@tcp(localhost:3306)/paytondb"
 	//dsn := "root:@tcp(127.0.0.1:3306)/test"
 
 	// Open a connection to the database
@@ -66,6 +66,47 @@ func GetTransactions(id string) ([]byte, error) {
 	}
 	// Query to fetch data from the table
 	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ?", id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// Slice to hold the results
+	var transactions []TransactionPayload
+
+	// Iterate over the rows
+	for rows.Next() {
+		var transaction TransactionPayload
+		err := rows.Scan(&transaction.IconUrl, &transaction.Title, &transaction.Date, &transaction.Time, &transaction.Amount, &transaction.Status)
+		if err != nil {
+			return nil, err
+		}
+		transactions = append(transactions, transaction)
+	}
+
+	// Check for errors from iterating over rows
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	// Print the results
+	//for _, transaction := range transactions {
+	//	fmt.Printf("Iconurl: %s, Title: %s, Date: %s, Time: %s, Amount: %s, Status: %s\n", transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status)
+	//}
+	bs, _ := json.Marshal(transactions)
+
+	return bs, nil
+
+}
+
+func TransApprove(id string) ([]byte, error) {
+	db, err1 := Conn()
+	if err1 != nil {
+		return nil, err1
+	}
+	// Query to fetch data from the table
+	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ? AND status = ?", id, "approve")
 	if err != nil {
 		return nil, err
 	}
@@ -203,6 +244,18 @@ func GetUser() ([]User, error) {
 
 	return users, nil
 }
+
+// func SetUser(user *structs.UserData) error {
+// 	db, err1 := Conn()
+// 	if err1 != nil {
+// 		return err1
+// 	}
+// 	query := `INSERT INTO users (trackid, fname, lname, email, phoneno, login_pin, trans_pin, user_pub_key, last_time_api_called)
+//               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+// 	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
+
+// 	return err
+// }
 
 func CheckBalance(amount, email string) (string, error) {
 	db, err := Conn()
