@@ -106,7 +106,7 @@ func TransApprove(id string) ([]byte, error) {
 		return nil, err1
 	}
 	// Query to fetch data from the table
-	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ? AND status = ?", id, "approve")
+	rows, err := db.Query("SELECT iconurl, title, date, time, amount, status FROM transactions WHERE user = ? AND status = ?", id, "Approved")
 	if err != nil {
 		return nil, err
 	}
