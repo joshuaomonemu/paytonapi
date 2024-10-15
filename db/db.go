@@ -1,9 +1,11 @@
 package db
 
 import (
+	structs "app/struct"
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -40,8 +42,8 @@ type TransactionPayload struct {
 func Conn() (*sql.DB, error) {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
-	dsn := "root:mypassword@tcp(localhost:3306)/paytondb"
-	//dsn := "root:@tcp(127.0.0.1:3306)/test"
+	//dsn := "root:mypassword@tcp(localhost:3306)/paytondb"
+	dsn := "root:@tcp(127.0.0.1:3306)/test"
 
 	// Open a connection to the database
 	db, err := sql.Open("mysql", dsn)
@@ -245,17 +247,17 @@ func GetUser() ([]User, error) {
 	return users, nil
 }
 
-// func SetUser(user *structs.UserData) error {
-// 	db, err1 := Conn()
-// 	if err1 != nil {
-// 		return err1
-// 	}
-// 	query := `INSERT INTO users (trackid, fname, lname, email, phoneno, login_pin, trans_pin, user_pub_key, last_time_api_called)
-//               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-// 	_, err := db.Exec(query, transaction.IconUrl, transaction.Title, transaction.Date, transaction.Time, transaction.Amount, transaction.Status, transaction.User)
+func SetUser(user *structs.UserData) error {
+	db, err1 := Conn()
+	if err1 != nil {
+		return err1
+	}
+	query := `INSERT INTO user1 (email, fullname, phone, password)
+              VALUES (?, ?, ?, ?)`
+	_, err := db.Exec(query, user.Email, user.Fullname, user.Phone, user.Password)
 
-// 	return err
-// }
+	return err
+}
 
 func CheckBalance(amount, email string) (string, error) {
 	db, err := Conn()
@@ -374,4 +376,44 @@ func WalletTrans(amount, email string) (string, error) {
 	}
 
 	return "okay", nil
+}
+
+func EmailExists(email string) (bool, error) {
+	db, _ := Conn()
+
+	const query = "SELECT 1 FROM user1 WHERE email = ?"
+	row := db.QueryRow(query, email)
+	var exists bool
+	err := row.Scan(&exists)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
+func StoreOTP(email string, otp string) error {
+	db, _ := Conn()
+	// Store the OTP in the database with a timestamp
+	expires := time.Now().Add(10 * time.Minute)
+	_, err := db.Exec("INSERT INTO otp (email, pin, expires) VALUES (?, ?, ?)", email, otp, expires)
+	return err
+}
+
+func GetOTP(email string) (string, error) {
+	db, _ := Conn()
+	// Retrieve the OTP from the database
+	var otp string
+	var expires time.Time
+	err := db.QueryRow("SELECT otp, expires FROM otps WHERE email = ?", email).Scan(&otp, &expires)
+	if err != nil {
+		return "", err
+	}
+	// Check if the OTP has expired
+	if time.Now().After(expires) {
+		return "", fmt.Errorf("OTP has expired")
+	}
+	return otp, nil
 }

@@ -136,9 +136,15 @@ type Variation struct {
 }
 
 type UserData struct {
-	Fname    string `json:"fname"`
-	Lname    string `json:"lname"`
+	Fullname string `json:"fullname"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Phone    string `json:"phone"`
+}
+
+type UserResponse struct {
+	Status   string      `json:"status"`
+	Message  string      `json:"message"`
+	Error    string      `json:"error"`
+	UserData interface{} `json:"userData"`
 }
