@@ -407,7 +407,7 @@ func GetOTP(email string) (string, error) {
 	// Retrieve the OTP from the database
 	var otp string
 	var expires time.Time
-	err := db.QueryRow("SELECT otp, expires FROM otps WHERE email = ?", email).Scan(&otp, &expires)
+	err := db.QueryRow("SELECT otp, expires FROM otp WHERE email = ?", email).Scan(&otp, &expires)
 	if err != nil {
 		return "", err
 	}
