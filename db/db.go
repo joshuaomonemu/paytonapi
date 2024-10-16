@@ -20,6 +20,12 @@ type User struct {
 	Email  string
 	Wallet string
 }
+type User2 struct {
+	Fullame string
+	Phone   string
+	Email   string
+	Wallet  string
+}
 type Transaction struct {
 	IconUrl string `json:"icon_url"`
 	Title   string `json:"title"`
@@ -423,4 +429,42 @@ func GetOTP(email string) (string, error) {
 		return "", fmt.Errorf("OTP has expired")
 	}
 	return otp, nil
+}
+
+func LoginUser(email, password string) (bool, error) {
+	db, _ := Conn()
+	// Retrieve the OTP from the database
+
+	var exists bool
+
+	// Prepare the SQL query
+	query := "SELECT EXISTS(SELECT 1 FROM user1 WHERE email = ? AND password = ?)"
+
+	// Execute the query
+	err := db.QueryRow(query, email, password).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	// Return the existence of the user with the given email and password
+	return exists, nil
+}
+
+func GetUserbyEmail(email string) (User2, error) {
+	db, _ := Conn()
+	var user User2
+
+	// Prepare the SQL query
+	query := "SELECT fullname, phone, wallet, email FROM user1 WHERE email = ?"
+
+	// Execute the query
+	err := db.QueryRow(query, email).Scan(&user.Fullame, &user.Phone, &user.Wallet, &user.Email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return User2{}, err
+		}
+		return User2{}, err
+	}
+
+	return user, nil
 }
