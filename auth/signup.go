@@ -3,6 +3,7 @@ package auth
 import (
 	"app/db"
 	"app/helper"
+	"app/mail"
 	structs "app/struct"
 	"encoding/json"
 	"fmt"
@@ -85,6 +86,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	//GENERATE OTP CODE
 	otp, _ := generateOTP(user.Email)
+	//MAIL OTP TO USERS EMAIL
+	mail.OtpMail(user.Email, otp)
 	//STORE OTP PIN IN DATABASE
 	db.StoreOTP(user.Email, otp)
 
@@ -98,12 +101,12 @@ func VerifyOtp(w http.ResponseWriter, r *http.Request) {
 
 	storedOTP, err := db.GetOTP(email)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		StructureResponse("Error fetching OTP", "400", "true", "", w)
 		return
 	}
 	if storedOTP != otp {
-		http.Error(w, "Invalid OTP", http.StatusBadRequest)
+		StructureResponse("Invalid OTP", "400", "true", "", w)
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]string{"message": "OTP is valid"})
+	StructureResponse("Account Verified Successfully", "200", "false", "", w)
 }
