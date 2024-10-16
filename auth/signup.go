@@ -101,7 +101,7 @@ func VerifyOtp(w http.ResponseWriter, r *http.Request) {
 
 	storedOTP, err := db.GetOTP(email)
 	if err != nil {
-		StructureResponse("Error fetching OTP", "400", "true", "", w)
+		StructureResponse(err.Error(), "400", "true", "", w)
 		return
 	}
 	if storedOTP != otp {

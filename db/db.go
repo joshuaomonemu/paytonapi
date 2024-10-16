@@ -406,13 +406,20 @@ func GetOTP(email string) (string, error) {
 	db, _ := Conn()
 	// Retrieve the OTP from the database
 	var otp string
-	var expires time.Time
+	var expires []byte // Change the type to []byte to hold the raw data
 	err := db.QueryRow("SELECT pin, expires FROM otp WHERE email = ?", email).Scan(&otp, &expires)
 	if err != nil {
 		return "", err
 	}
+
+	// Convert []byte to string and then parse as time.Time
+	parsedTime, err := time.Parse("2006-01-02 15:04:05", string(expires))
+	if err != nil {
+		return "", fmt.Errorf("error parsing expiration time: %v", err)
+	}
+
 	// Check if the OTP has expired
-	if time.Now().After(expires) {
+	if time.Now().After(parsedTime) {
 		return "", fmt.Errorf("OTP has expired")
 	}
 	return otp, nil
