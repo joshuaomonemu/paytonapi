@@ -21,11 +21,11 @@ type User struct {
 	Wallet string
 }
 type User2 struct {
-	Fullname string
-	Phone    string
-	Email    string
-	Wallet   string
-	Verified string
+	Fullname string `json:"fullname"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	Wallet   string `json:"wallet"`
+	Verified string `json:"verified"`
 }
 type Transaction struct {
 	IconUrl string `json:"icon_url"`
