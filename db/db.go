@@ -21,7 +21,7 @@ type User struct {
 	Wallet string
 }
 type User2 struct {
-	Fullame  string
+	Fullname string
 	Phone    string
 	Email    string
 	Wallet   string
@@ -459,7 +459,7 @@ func GetUserbyEmail(email string) (User2, error) {
 	query := "SELECT fullname, phone, wallet, email, verified_email FROM user1 WHERE email = ?"
 
 	// Execute the query
-	err := db.QueryRow(query, email).Scan(&user.Fullame, &user.Phone, &user.Wallet, &user.Email, &user.Verified)
+	err := db.QueryRow(query, email).Scan(&user.Fullname, &user.Phone, &user.Wallet, &user.Email, &user.Verified)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
