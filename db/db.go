@@ -21,10 +21,11 @@ type User struct {
 	Wallet string
 }
 type User2 struct {
-	Fullame string
-	Phone   string
-	Email   string
-	Wallet  string
+	Fullame  string
+	Phone    string
+	Email    string
+	Wallet   string
+	Verified string
 }
 type Transaction struct {
 	IconUrl string `json:"icon_url"`
@@ -455,10 +456,11 @@ func GetUserbyEmail(email string) (User2, error) {
 	var user User2
 
 	// Prepare the SQL query
-	query := "SELECT fullname, phone, wallet, email FROM user1 WHERE email = ?"
+	query := "SELECT fullname, phone, wallet, email, verified_email FROM user1 WHERE email = ?"
 
 	// Execute the query
-	err := db.QueryRow(query, email).Scan(&user.Fullame, &user.Phone, &user.Wallet, &user.Email)
+	err := db.QueryRow(query, email).Scan(&user.Fullame, &user.Phone, &user.Wallet, &user.Email, &user.Verified)
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return User2{}, err

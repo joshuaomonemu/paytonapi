@@ -17,6 +17,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//CHECKING IF THE EMAIL AND PASSWORD FIELDS ARE EMPTY
 	if user.Email == "" {
 		StructureResponse("Empty email field", "400", "true", "", w)
 		return
@@ -26,8 +27,11 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//ESCAPE STRINGS FROM PASSWORD AND EMAIL
 	user.Email = helper.FormatAndEscape(user.Email)
 	user.Password = helper.FormatAndEscape(user.Password)
+
+	//CHECK IF USER EMAIL EXISTS
 
 	exists, err := db.EmailExists(user.Email)
 	if err != nil {
