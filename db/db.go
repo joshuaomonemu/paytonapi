@@ -215,25 +215,25 @@ func SetWallets(transaction *Transaction) error {
 	return err
 }
 
-func GetUser() ([]User, error) {
+func GetUser() ([]User2, error) {
 	db, err := Conn()
 	if err != nil {
 		return nil, err
 	}
 	// Query to fetch data from the table
-	rows, err := db.Query("SELECT id, fname, lname, email, wallet FROM users")
+	rows, err := db.Query("SELECT fullname, email, wallet FROM users")
 	if err != nil {
 		return nil, err
 	}
 	//defer rows.Close()
 
 	// Slice to hold the results
-	var users []User
+	var users []User2
 
 	// Iterate over the rows
 	for rows.Next() {
-		var user User
-		err := rows.Scan(&user.ID, &user.FName, &user.LName, &user.Email, &user.Wallet)
+		var user User2
+		err := rows.Scan(&user.Fullname, &user.Email, &user.Wallet)
 		if err != nil {
 			return nil, err
 		}
@@ -259,7 +259,7 @@ func SetUser(user *structs.UserData) error {
 	if err1 != nil {
 		return err1
 	}
-	query := `INSERT INTO user1 (email, fullname, phone, password)
+	query := `INSERT INTO users (email, fullname, phone, password)
               VALUES (?, ?, ?, ?)`
 	_, err := db.Exec(query, user.Email, user.Fullname, user.Phone, user.Password)
 
@@ -388,7 +388,7 @@ func WalletTrans(amount, email string) (string, error) {
 func EmailExists(email string) (bool, error) {
 	db, _ := Conn()
 
-	const query = "SELECT 1 FROM user1 WHERE email = ?"
+	const query = "SELECT 1 FROM users WHERE email = ?"
 	row := db.QueryRow(query, email)
 	var exists bool
 	err := row.Scan(&exists)
@@ -439,7 +439,7 @@ func LoginUser(email, password string) (bool, error) {
 	var exists bool
 
 	// Prepare the SQL query
-	query := "SELECT EXISTS(SELECT 1 FROM user1 WHERE email = ? AND password = ?)"
+	query := "SELECT EXISTS(SELECT 1 FROM users WHERE email = ? AND password = ?)"
 
 	// Execute the query
 	err := db.QueryRow(query, email, password).Scan(&exists)
@@ -456,7 +456,7 @@ func GetUserbyEmail(email string) (User2, error) {
 	var user User2
 
 	// Prepare the SQL query
-	query := "SELECT fullname, phone, wallet, email, verified_email FROM user1 WHERE email = ?"
+	query := "SELECT fullname, phone, wallet, email, verified_email FROM users WHERE email = ?"
 
 	// Execute the query
 	err := db.QueryRow(query, email).Scan(&user.Fullname, &user.Phone, &user.Wallet, &user.Email, &user.Verified)
