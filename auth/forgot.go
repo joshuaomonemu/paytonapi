@@ -52,4 +52,6 @@ func RequestPasswordReset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	StructureResponse("Email Sent", "200", "false", "", w)
+
 }

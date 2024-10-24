@@ -49,8 +49,8 @@ type TransactionPayload struct {
 func Conn() (*sql.DB, error) {
 	// Database connection string
 	// Format: username:password@tcp(localhost:3306)/dbname
-	dsn := "root:mypassword@tcp(localhost:3306)/paytondb"
-	//dsn := "root:@tcp(127.0.0.1:3306)/test"
+	// dsn := "root:mypassword@tcp(localhost:3306)/paytondb"
+	dsn := "root:@tcp(127.0.0.1:3306)/test"
 
 	// Open a connection to the database
 	db, err := sql.Open("mysql", dsn)
