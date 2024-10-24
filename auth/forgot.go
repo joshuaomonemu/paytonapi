@@ -35,7 +35,7 @@ func RequestPasswordReset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//CHECKING IF THE EMAIL AND PASSWORD FIELDS ARE EMPTY
+	//CHECKING IF THE EMAIL FIELDS ARE EMPTY
 	if user.Email == "" {
 		StructureResponse("Empty email field", "400", "true", "", w)
 		return
@@ -48,7 +48,7 @@ func RequestPasswordReset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !exists {
-		StructureResponse("An error occured", "400", err.Error(), "", w)
+		StructureResponse("Email does not exist", "400", "Email does not exist", "", w)
 		return
 	}
 
