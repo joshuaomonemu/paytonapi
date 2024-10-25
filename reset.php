@@ -1,3 +1,9 @@
+<?php
+
+    $token =  $_GET['token'];
+
+
+?>
 <!DOCTYPE html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -100,6 +106,10 @@
         <!-- Second Input Text  -->
         <div class="input-container"><i class="fa fa-key icon"></i>
             <input class="input-field" id="password-2" type="password" placeholder="Re-type your new password" name="confirmPassword" oninput='validate();'>
+        </div>
+
+        <div class="input-container" style="display: none;">
+            <input class="input-field" id="token" type="text" name="token" value="<?php echo $token; ?>">
         </div>
         <!-- Length  -->
         <span id="pwd-length-2"></span>

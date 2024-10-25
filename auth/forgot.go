@@ -6,6 +6,7 @@ import (
 	structs "app/struct"
 	"encoding/hex"
 	"encoding/json"
+	"io"
 	"math/rand"
 	"net/http"
 )
@@ -18,6 +19,11 @@ import (
 // 	Token       string
 // 	TokenExpiry time.Time
 // }
+
+type PageData struct {
+	Token string
+	Error string
+}
 
 func generateResetToken() (string, error) {
 	// Generate a random 32-byte token
@@ -74,5 +80,24 @@ func RequestPasswordReset(w http.ResponseWriter, r *http.Request) {
 	mail.ResetMail(user.Email, linke)
 
 	StructureResponse("Email Sent", "200", "false", "", w)
+
+}
+
+func SetPassword(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+	token := r.FormValue("token")
+	password := r.FormValue("password")
+	confirmPassword := r.FormValue("confirm_password")
+
+	if password != confirmPassword {
+		io.WriteString(w, "Passwords are not thesame")
+		return
+	}
+
+	db.ResetPassword(token, password)
 
 }

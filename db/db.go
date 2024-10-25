@@ -480,3 +480,36 @@ func StoreResetToken(email string, token string) error {
 	_, err := db.Exec(query, token, expiration, email)
 	return err
 }
+
+func ValidateResetToken(token string) (string, error) {
+	db, _ := Conn()
+
+	var email string
+	var expiry time.Time
+	query := `SELECT email, reset_token_expiry FROM users WHERE reset_token = ?`
+	err := db.QueryRow(query, token).Scan(&email, &expiry)
+	if err != nil {
+		return "", fmt.Errorf("invalid token")
+	}
+
+	// Check if the token has expired
+	if time.Now().After(expiry) {
+		return "", fmt.Errorf("token expired")
+	}
+
+	return email, nil
+}
+
+func ResetPassword(token string, newPassword string) error {
+	db, _ := Conn()
+	// Validate the token
+	email, err := ValidateResetToken(token)
+	if err != nil {
+		return err
+	}
+
+	// Update the password in the database and clear the reset token
+	query := `UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?`
+	_, err = db.Exec(query, newPassword, email)
+	return err
+}
