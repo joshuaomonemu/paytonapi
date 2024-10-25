@@ -98,6 +98,9 @@ func SetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.ResetPassword(token, password)
+	err := db.ResetPassword(token, password)
+	if err != nil {
+		io.WriteString(w, "done")
+	}
 
 }
