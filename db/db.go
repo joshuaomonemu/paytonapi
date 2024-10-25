@@ -470,3 +470,13 @@ func GetUserbyEmail(email string) (User2, error) {
 
 	return user, nil
 }
+
+func StoreResetToken(email string, token string) error {
+	// Store the token in the database with an expiration time (1 hour)
+	db, _ := Conn()
+
+	expiration := time.Now().Add(20 * time.Minute)
+	query := `UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?`
+	_, err := db.Exec(query, token, expiration, email)
+	return err
+}

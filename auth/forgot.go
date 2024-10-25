@@ -2,8 +2,11 @@ package auth
 
 import (
 	"app/db"
+	"app/mail"
 	structs "app/struct"
+	"encoding/hex"
 	"encoding/json"
+	"math/rand"
 	"net/http"
 )
 
@@ -16,14 +19,14 @@ import (
 // 	TokenExpiry time.Time
 // }
 
-// // GenerateToken creates a random reset token
-// func GenerateToken() (string, error) {
-// 	bytes := make([]byte, 16)
-// 	if _, err := rand.Read(bytes); err != nil {
-// 		return "", err
-// 	}
-// 	return hex.EncodeToString(bytes), nil
-// }
+func generateResetToken() (string, error) {
+	// Generate a random 32-byte token
+	token := make([]byte, 32)
+	if _, err := rand.Read(token); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(token), nil
+}
 
 // RequestPasswordReset handles the forgot password request
 func RequestPasswordReset(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +54,24 @@ func RequestPasswordReset(w http.ResponseWriter, r *http.Request) {
 		StructureResponse("Email does not exist", "400", "Email does not exist", "", w)
 		return
 	}
+
+	//Generate request token for password reset
+	token, err := generateResetToken()
+	if err != nil {
+		StructureResponse("An error occured", "400", err.Error(), "", w)
+		return
+	}
+
+	// Store the token in the database
+	err = db.StoreResetToken(user.Email, token)
+	if err != nil {
+		StructureResponse("An error occured", "400", err.Error(), "", w)
+		return
+	}
+
+	linke := "https://payton.jitssolutions.com/reset.html?token=" + token
+
+	mail.ResetMail(user.Email, linke)
 
 	StructureResponse("Email Sent", "200", "false", "", w)
 
