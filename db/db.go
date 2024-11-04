@@ -513,3 +513,41 @@ func ResetPassword(token string, newPassword string) error {
 	_, err = db.Exec(query, newPassword, email)
 	return err
 }
+
+func DeleteUser(email string) (string, error) {
+	db, _ := Conn()
+
+	// Start a new transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return "", fmt.Errorf("could not begin transaction: %v", err)
+	}
+
+	// Defer a rollback in case of error
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// Delete transactions linked to the email
+	deleteTransactionsQuery := "DELETE FROM transactions WHERE user = ?"
+	_, err = tx.Exec(deleteTransactionsQuery, email)
+	if err != nil {
+		return "", fmt.Errorf("could not delete transactions: %v", err)
+	}
+
+	// Delete user from the users table
+	deleteUserQuery := "DELETE FROM users WHERE email = ?"
+	_, err = tx.Exec(deleteUserQuery, email)
+	if err != nil {
+		return "", fmt.Errorf("could not delete user: %v", err)
+	}
+
+	// Commit the transaction if both deletions succeed
+	if err = tx.Commit(); err != nil {
+		return "", fmt.Errorf("could not commit transaction: %v", err)
+	}
+
+	return "ok", nil
+}

@@ -104,3 +104,30 @@ func SetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+	email := r.FormValue("email")
+
+	//CHECK IF USER EMAIL EXISTS
+
+	exists, err := db.EmailExists(email)
+	if err != nil {
+		StructureResponse("An error occured", "400", err.Error(), "", w)
+		return
+	}
+	if exists {
+
+		rep, _ := db.DeleteUser(email)
+		io.WriteString(w, rep)
+
+	} else {
+		StructureResponse("This email does not exist", "400", "true", "", w)
+		return
+	}
+
+}
