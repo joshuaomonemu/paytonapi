@@ -64,6 +64,8 @@ func Routes() {
 	r.HandleFunc("/auth/user/verifyotp", auth.VerifyOtp).Methods("POST")
 	r.HandleFunc("/auth/user/reset-password", auth.RequestPasswordReset).Methods("POST")
 	r.HandleFunc("/auth/user/set-password", auth.SetPassword).Methods("POST")
+
+	r.HandleFunc("/auth/user/delete-user", auth.DeleteUser).Methods("POST")
 	// r.HandleFunc("/user/pay", controller.UpdateWallet).Methods("POST")
 
 	r.HandleFunc("/admin/balance", controller.Balance).Methods("GET")
